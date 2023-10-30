@@ -1,0 +1,10 @@
+<Project>
+
+    <PropertyGroup>
+        <BaseNamespace>Hackathon.HackstreetBoys</BaseNamespace>
+        <Product>Hackathon.HackstreetBoys</Product>
+        <RepositoryName>Hackathon.HackstreetBoys</RepositoryName>
+        <CopyrightYears>2023</CopyrightYears>
+    </PropertyGroup>
+
+</Project>
