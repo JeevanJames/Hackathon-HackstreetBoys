@@ -11,11 +11,10 @@ public sealed class WatchCommand : Command
 {
     private DateTimeOffset _lastChangedTimestamp = DateTimeOffset.MinValue;
 
-    [Argument(Optional = false, Order = 0,
+    [Argument(Optional = true, Order = 0,
         HelpName = "website name",
         HelpText = "The name of the IIS website to watch. If --search is specified, this will be treated as a regular expression for finding the website.")]
-    [Aargh.Transformers.ValidateStringLength(minLength: 1, maxLength: int.MaxValue)]
-    public required string WebsiteName { get; set; }
+    public string? WebsiteName { get; set; }
 
     [Flag("search", "s",
         HelpText = "If specified, treats the website name as a regular expression pattern and displays all matching websites for you to select one.")]
@@ -25,9 +24,18 @@ public sealed class WatchCommand : Command
     {
         using ServerManager manager = new();
 
+        string siteName;
+        if (string.IsNullOrWhiteSpace(WebsiteName))
+        {
+            siteName = @"^.+$";
+            Search = true;
+        }
+        else
+            siteName = WebsiteName;
+
         Site? site = Search
-            ? PromptForSite(manager)
-            : manager.Sites.FirstOrDefault(s => s.Name.Equals(WebsiteName, StringComparison.OrdinalIgnoreCase));
+            ? PromptForSite(manager, siteName)
+            : manager.Sites.FirstOrDefault(s => s.Name.Equals(siteName, StringComparison.OrdinalIgnoreCase));
 
         if (site is null)
             throw new CliException("Could not find a matching site.");
@@ -53,7 +61,11 @@ public sealed class WatchCommand : Command
         watcher.Changed += (_, args) => OnConfigFileChanged(args.Name!, site);
 
         MarkupLineInterpolated($"Watching for config changes in [{Cyan1}]{site.Name}[/].");
-        MarkupLineInterpolated($"[{Magenta1}]Ctrl+R[/] Force restart | [{Magenta1}]Ctrl+B[/] Browse | [{Magenta1}]Ctrl+O[/] Open Config | [{Magenta1}]Ctrl+Q[/] Stop watching");
+        MarkupInterpolated($"[{Magenta1}]Ctrl+R[/] Force restart");
+        MarkupInterpolated($" | [{Magenta1}]Ctrl+B[/] Browse");
+        MarkupInterpolated($" | [{Magenta1}]Ctrl+Alt+B[/] Browse Swagger");
+        MarkupInterpolated($" | [{Magenta1}]Ctrl+O[/] Open Config");
+        MarkupLineInterpolated($" | [{Magenta1}]Ctrl+Q[/] Stop watching");
 
         string? keysPressed;
         do
@@ -62,23 +74,15 @@ public sealed class WatchCommand : Command
             switch (keysPressed)
             {
                 case "Ctrl+R":
-                    MarkupInterpolated($"Forcing restart of site [{Cyan1}]{site.Name}[/]...");
-                    site.Stop();
-                    site.Start();
-                    MarkupLineInterpolated($"[{Green}]Completed.[/]");
+                    RestartSite(site, $"Forcing restart of site [{Cyan1}]{site.Name}[/]...");
                     break;
 
                 case "Ctrl+B":
-                    try
-                    {
-                        ProcessStartInfo psi = new(url) { UseShellExecute = true, };
-                        Process.Start(psi);
-                    }
-                    catch (Exception ex)
-                    {
-                        WriteException(ex);
-                    }
+                    ShellExecute(url);
+                    break;
 
+                case "Ctrl+Alt+B":
+                    ShellExecute(new Uri(new Uri(url), "swagger").AbsoluteUri);
                     break;
 
                 case "Ctrl+O":
@@ -87,9 +91,14 @@ public sealed class WatchCommand : Command
                         .Where(p => !p.EndsWith(".deps.json") && !p.EndsWith(".runtimeconfig.json"))
                         .OrderBy(Path.GetFileName, StringComparer.OrdinalIgnoreCase)
                         .ToArray();
-                    string configFilePath = configFiles.Length == 1 ? configFiles[0] : PromptForConfigFile(configFiles);
-                    ProcessStartInfo psi2 = new(configFilePath) { UseShellExecute = true, };
-                    Process.Start(psi2);
+                    if (configFiles.Length > 0)
+                    {
+                        string configFilePath =
+                            configFiles.Length == 1 ? configFiles[0] : PromptForConfigFile(configFiles);
+                        ShellExecute(configFilePath);
+                    }
+                    else
+                        MarkupLineInterpolated($"[{Red}]No config files found for the site![/]");
                     break;
             }
         } while (keysPressed != "Ctrl+Q");
@@ -123,29 +132,32 @@ public sealed class WatchCommand : Command
         TimeSpan difference = currentTimestamp.Subtract(_lastChangedTimestamp);
 
         if (difference.TotalMilliseconds > 500)
-        {
-            MarkupInterpolated($"[{Magenta1}][[{DateTimeOffset.Now:T}]][/] File [{Yellow1}]{fileName}[/] changed. Restarting... ");
-            try
-            {
-                site.Stop();
-                site.Start();
-                MarkupLineInterpolated($"[{Green}]Completed.[/]");
-            }
-            catch (Exception ex)
-            {
-                MarkupLineInterpolated($"[{Red}]Errored![/]");
-                WriteException(ex);
-            }
-        }
+            RestartSite(site, $"[{Magenta1}][[{DateTimeOffset.Now:T}]][/] File [{Yellow1}]{fileName}[/] changed. Restarting... ");
 
         _lastChangedTimestamp = currentTimestamp;
     }
 
-    private Site PromptForSite(ServerManager manager)
+    private static void RestartSite(Site site, FormattableString activityMessage)
     {
-        Regex siteNamePattern = new(WebsiteName, RegexOptions.Compiled | RegexOptions.ExplicitCapture,
+        MarkupInterpolated(activityMessage);
+        try
+        {
+            site.Stop();
+            site.Start();
+            MarkupLineInterpolated($"[{Green}]Completed.[/]");
+        }
+        catch (Exception ex)
+        {
+            MarkupLineInterpolated($"[{Red}]Errored![/]");
+            WriteException(ex);
+        }
+    }
+
+    private Site PromptForSite(ServerManager manager, string siteName)
+    {
+        Regex siteNamePattern = new(siteName, RegexOptions.Compiled | RegexOptions.ExplicitCapture,
             TimeSpan.FromSeconds(1));
-        List<Site> matchingSites = manager.Sites
+        var matchingSites = manager.Sites
             .Where(site => siteNamePattern.IsMatch(site.Name))
             .OrderBy(site => site.Name)
             .ToList();
@@ -167,5 +179,18 @@ public sealed class WatchCommand : Command
             .MoreChoicesText($"[{Grey}]Use up and down arrows to show more files[/]")
             .AddChoices(configFiles)
             .UseConverter(Path.GetFileName));
+    }
+
+    private static void ShellExecute(string fileOrUrl)
+    {
+        try
+        {
+            ProcessStartInfo psi = new(fileOrUrl) { UseShellExecute = true, };
+            Process.Start(psi);
+        }
+        catch (Exception ex)
+        {
+            WriteException(ex);
+        }
     }
 }
