@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 
 using Microsoft.Web.Administration;
@@ -36,6 +37,14 @@ public sealed class WatchCommand : Command
         string physicalPath = site.GetDirectory();
         MarkupLineInterpolated($"Physical path: [{Cyan1}]{physicalPath}[/]");
 
+        Binding binding = site.Bindings.Count == 1
+            ? site.Bindings[0]
+            : site.Bindings.FirstOrDefault(b => b.Protocol.Equals("https", StringComparison.OrdinalIgnoreCase)) ??
+              site.Bindings[0];
+        string host = string.IsNullOrEmpty(binding.Host) ? "localhost" : binding.Host;
+        string url = $"{binding.Protocol}://{host}:{binding.EndPoint.Port}";
+        MarkupLineInterpolated($"URL: [{Cyan1}]{url}[/]");
+
         using FileSystemWatcher watcher = new(physicalPath, "*.json")
         {
             NotifyFilter = NotifyFilters.LastWrite,
@@ -43,11 +52,13 @@ public sealed class WatchCommand : Command
         };
         watcher.Changed += (_, args) => OnConfigFileChanged(args.Name!, site);
 
-        MarkupLineInterpolated($"Watching for config changes in [{Cyan1}]{site.Name}[/]. Press [{Yellow}]Ctrl+C[/] to stop watching.");
+        MarkupLineInterpolated($"Watching for config changes in [{Cyan1}]{site.Name}[/].");
+        MarkupLineInterpolated($"[{Magenta1}]Ctrl+R[/] Force restart | [{Magenta1}]Ctrl+B[/] Browse | [{Magenta1}]Ctrl+O[/] Open Config | [{Magenta1}]Ctrl+Q[/] Stop watching");
 
-        string keysPressed = GetKeysPressed(System.Console.ReadKey(intercept: true));
-        while (keysPressed != "Ctrl+C")
+        string? keysPressed;
+        do
         {
+            keysPressed = GetKeysPressed(System.Console.ReadKey(intercept: true));
             switch (keysPressed)
             {
                 case "Ctrl+R":
@@ -56,10 +67,28 @@ public sealed class WatchCommand : Command
                     site.Start();
                     MarkupLineInterpolated($"[{Green}]Completed.[/]");
                     break;
-            }
 
-            keysPressed = GetKeysPressed(System.Console.ReadKey(intercept: true));
-        }
+                case "Ctrl+B":
+                    try
+                    {
+                        ProcessStartInfo psi = new(url) { UseShellExecute = true, };
+                        Process.Start(psi);
+                    }
+                    catch (Exception ex)
+                    {
+                        WriteException(ex);
+                    }
+
+                    break;
+
+                case "Ctrl+O":
+                    string[] configFiles = Directory.GetFiles(physicalPath, "*.json", SearchOption.TopDirectoryOnly);
+                    string configFilePath = configFiles.Length == 1 ? configFiles[0] : PromptForConfigFile(configFiles);
+                    ProcessStartInfo psi2 = new(configFilePath) { UseShellExecute = true, };
+                    Process.Start(psi2);
+                    break;
+            }
+        } while (keysPressed != "Ctrl+Q");
     }
 
     private static string GetKeysPressed(ConsoleKeyInfo keyInfo)
@@ -76,8 +105,12 @@ public sealed class WatchCommand : Command
                 keys += "Shift+";
         }
 
-        keys += keyInfo.Key.ToString();
-        return keys;
+        return keys + keyInfo.Key switch
+        {
+            ConsoleKey.Escape => "Esc",
+            ConsoleKey.Enter => "Enter",
+            _ => keyInfo.Key.ToString(),
+        };
     }
 
     private void OnConfigFileChanged(string fileName, Site site)
@@ -120,5 +153,15 @@ public sealed class WatchCommand : Command
             .MoreChoicesText($"[{Grey}]Use up and down arrows to show more sites[/]")
             .AddChoices(matchingSites)
             .UseConverter(site => site.Name));
+    }
+
+    private string PromptForConfigFile(string[] configFiles)
+    {
+        return Prompt(new SelectionPrompt<string>()
+            .Title("Choose config file to open:")
+            .PageSize(10)
+            .MoreChoicesText($"[{Grey}]Use up and down arrows to show more files[/]")
+            .AddChoices(configFiles)
+            .UseConverter(Path.GetFileName));
     }
 }
