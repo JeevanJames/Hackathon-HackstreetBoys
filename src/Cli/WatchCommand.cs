@@ -82,7 +82,11 @@ public sealed class WatchCommand : Command
                     break;
 
                 case "Ctrl+O":
-                    string[] configFiles = Directory.GetFiles(physicalPath, "*.json", SearchOption.TopDirectoryOnly);
+                    string[] configFiles = Directory
+                        .EnumerateFiles(physicalPath, "*.json", SearchOption.TopDirectoryOnly)
+                        .Where(p => !p.EndsWith(".deps.json") && !p.EndsWith(".runtimeconfig.json"))
+                        .OrderBy(Path.GetFileName, StringComparer.OrdinalIgnoreCase)
+                        .ToArray();
                     string configFilePath = configFiles.Length == 1 ? configFiles[0] : PromptForConfigFile(configFiles);
                     ProcessStartInfo psi2 = new(configFilePath) { UseShellExecute = true, };
                     Process.Start(psi2);
@@ -137,7 +141,7 @@ public sealed class WatchCommand : Command
         _lastChangedTimestamp = currentTimestamp;
     }
 
-    private Site? PromptForSite(ServerManager manager)
+    private Site PromptForSite(ServerManager manager)
     {
         Regex siteNamePattern = new(WebsiteName, RegexOptions.Compiled | RegexOptions.ExplicitCapture,
             TimeSpan.FromSeconds(1));
@@ -155,7 +159,7 @@ public sealed class WatchCommand : Command
             .UseConverter(site => site.Name));
     }
 
-    private string PromptForConfigFile(string[] configFiles)
+    private static string PromptForConfigFile(string[] configFiles)
     {
         return Prompt(new SelectionPrompt<string>()
             .Title("Choose config file to open:")
