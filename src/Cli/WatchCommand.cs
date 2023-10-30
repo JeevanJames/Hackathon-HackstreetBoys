@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
 
 using Microsoft.Web.Administration;
@@ -22,12 +23,16 @@ public sealed class WatchCommand : Command
 
     protected override void HandleCommand()
     {
+        // Check whether we are in admin mode
+        if (!IsInAdminMode())
+            throw new CliException("Please run the program in Windows admin mode.");
+
         using ServerManager manager = new();
 
         string siteName;
         if (string.IsNullOrWhiteSpace(WebsiteName))
         {
-            siteName = @"^.+$";
+            siteName = "^.+$";
             Search = true;
         }
         else
@@ -102,6 +107,13 @@ public sealed class WatchCommand : Command
                     break;
             }
         } while (keysPressed != "Ctrl+Q");
+    }
+
+    private static bool IsInAdminMode()
+    {
+        if (OperatingSystem.IsWindows())
+            return new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
+        return false;
     }
 
     private static string GetKeysPressed(ConsoleKeyInfo keyInfo)
