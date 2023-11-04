@@ -9,6 +9,11 @@
         <Description>Hackathon Hackstreet Boys</Description>
     </PropertyGroup>
 
+    <PropertyGroup Label="dotnet tool">
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>$(AssemblyName)</ToolCommandName>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="Aargh" Version="0.1.10" />
         <PackageReference Include="Aargh.Extensions.SpectreConsole" Version="0.1.10" />
