@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Hackathon.HackstreetBoys.WinForms;
 
 public partial class MainForm : Form
@@ -16,7 +18,12 @@ public partial class MainForm : Form
             Application.Exit();
     }
 
-    private void OnLoadSite(object sender, EventArgs e)
+    private void miFileExit_Click(object sender, EventArgs e)
+    {
+        Close();
+    }
+
+    private void miFileLoadSite_Click(object sender, EventArgs e)
     {
         LoadSite();
     }
@@ -34,11 +41,14 @@ public partial class MainForm : Form
         if (dlgSelectSite.ShowDialog(this) == DialogResult.Cancel)
             return false;
 
+        //TODO: Check if the selected site is the same as the active site.
+
         _details = dlgSelectSite.GetResult();
 
         lblStatusSiteName.Text = _details.Site;
         lblStatusDirectory.Text = _details.Directory;
         lblStatusUrl.Text = _details.Url;
+        lblStatusLogDirectory.Text = _details.LogDirectory;
 
         ActivateFirstNavView();
 
@@ -72,5 +82,20 @@ public partial class MainForm : Form
     private void ActivateFirstNavView()
     {
         ActivateNavView(toolbarNavigation.Items.OfType<ToolStripButton>().First());
+    }
+
+    private void miSiteExplore_Click(object sender, EventArgs e)
+    {
+        Process.Start("explorer.exe", _details.Directory);
+    }
+
+    private void miSiteExploreLogs_Click(object sender, EventArgs e)
+    {
+        Process.Start("explorer.exe", _details.LogDirectory);
+    }
+
+    private void miSiteBrowse_Click(object sender, EventArgs e)
+    {
+        Process.Start(new ProcessStartInfo(_details.Url) { UseShellExecute = true });
     }
 }

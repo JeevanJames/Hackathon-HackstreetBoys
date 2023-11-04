@@ -1,4 +1,8 @@
-﻿using Microsoft.Web.Administration;
+﻿using System.Text.Json;
+
+using JsonCons.JsonPath;
+
+using Microsoft.Web.Administration;
 
 namespace Hackathon.HackstreetBoys.WinForms;
 
@@ -140,8 +144,19 @@ public partial class SelectSiteDialog : Form
 
         static string GetLogDirectory(string directory)
         {
-            //TODO: Figure out the directory from the appsettings.json
-            return Path.Combine(directory, "Logs");
+            string appSettingsPath = Path.Combine(directory, "appsettings.json");
+            if (!File.Exists(appSettingsPath))
+                return Path.Combine(directory, "Logs");
+
+            string json = File.ReadAllText(appSettingsPath);
+            using var jdoc = JsonDocument.Parse(json);
+
+            JsonSelector selector = JsonSelector.Parse("$.DopLogging.Serilog.WriteTo[?(@.Name == 'File')].Args.Path");
+            IList<JsonElement> matchingElements = selector.Select(jdoc.RootElement);
+            if (matchingElements.Count == 0)
+                return Path.Combine(directory, "Logs");
+
+            return Path.Combine(directory, matchingElements[0].GetString() ?? "Logs");
         }
     }
 }

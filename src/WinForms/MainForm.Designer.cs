@@ -30,9 +30,16 @@ partial class MainForm
     {
         MenuStrip menuMain;
         ToolStripMenuItem menuMainFile;
+        ToolStripSeparator miSeparatorFile1;
         var resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+        ToolStripMenuItem menuMainSite;
+        miFileLoadSite = new ToolStripMenuItem();
         miFileExit = new ToolStripMenuItem();
+        miSiteExplore = new ToolStripMenuItem();
+        miSiteExploreLogs = new ToolStripMenuItem();
+        miSiteBrowse = new ToolStripMenuItem();
         toolbarMain = new ToolStrip();
+        btnToolbarLoadSite = new ToolStripButton();
         toolbarNavigation = new ToolStrip();
         tsNavConfig = new ToolStripButton();
         tsNavLogging = new ToolStripButton();
@@ -42,9 +49,11 @@ partial class MainForm
         lblStatusSiteName = new ToolStripStatusLabel();
         lblStatusDirectory = new ToolStripStatusLabel();
         lblStatusUrl = new ToolStripStatusLabel();
-        btnToolbarLoadSite = new ToolStripButton();
+        lblStatusLogDirectory = new ToolStripStatusLabel();
         menuMain = new MenuStrip();
         menuMainFile = new ToolStripMenuItem();
+        miSeparatorFile1 = new ToolStripSeparator();
+        menuMainSite = new ToolStripMenuItem();
         menuMain.SuspendLayout();
         toolbarMain.SuspendLayout();
         toolbarNavigation.SuspendLayout();
@@ -53,7 +62,7 @@ partial class MainForm
         // 
         // menuMain
         // 
-        menuMain.Items.AddRange(new ToolStripItem[] { menuMainFile });
+        menuMain.Items.AddRange(new ToolStripItem[] { menuMainFile, menuMainSite });
         menuMain.Location = new Point(0, 0);
         menuMain.Name = "menuMain";
         menuMain.Size = new Size(800, 24);
@@ -62,17 +71,58 @@ partial class MainForm
         // 
         // menuMainFile
         // 
-        menuMainFile.DropDownItems.AddRange(new ToolStripItem[] { miFileExit });
+        menuMainFile.DropDownItems.AddRange(new ToolStripItem[] { miFileLoadSite, miSeparatorFile1, miFileExit });
         menuMainFile.Name = "menuMainFile";
         menuMainFile.Size = new Size(37, 20);
         menuMainFile.Text = "&File";
+        // 
+        // miFileLoadSite
+        // 
+        miFileLoadSite.Name = "miFileLoadSite";
+        miFileLoadSite.Size = new Size(131, 22);
+        miFileLoadSite.Text = "Load &Site...";
+        miFileLoadSite.Click += miFileLoadSite_Click;
+        // 
+        // miSeparatorFile1
+        // 
+        miSeparatorFile1.Name = "miSeparatorFile1";
+        miSeparatorFile1.Size = new Size(128, 6);
         // 
         // miFileExit
         // 
         miFileExit.Image = (Image)resources.GetObject("miFileExit.Image");
         miFileExit.Name = "miFileExit";
-        miFileExit.Size = new Size(93, 22);
+        miFileExit.Size = new Size(131, 22);
         miFileExit.Text = "E&xit";
+        miFileExit.Click += miFileExit_Click;
+        // 
+        // menuMainSite
+        // 
+        menuMainSite.DropDownItems.AddRange(new ToolStripItem[] { miSiteExplore, miSiteExploreLogs, miSiteBrowse });
+        menuMainSite.Name = "menuMainSite";
+        menuMainSite.Size = new Size(38, 20);
+        menuMainSite.Text = "&Site";
+        // 
+        // miSiteExplore
+        // 
+        miSiteExplore.Name = "miSiteExplore";
+        miSiteExplore.Size = new Size(233, 22);
+        miSiteExplore.Text = "&Explore Directory";
+        miSiteExplore.Click += miSiteExplore_Click;
+        // 
+        // miSiteExploreLogs
+        // 
+        miSiteExploreLogs.Name = "miSiteExploreLogs";
+        miSiteExploreLogs.Size = new Size(233, 22);
+        miSiteExploreLogs.Text = "Explorer Log Directory";
+        miSiteExploreLogs.Click += miSiteExploreLogs_Click;
+        // 
+        // miSiteBrowse
+        // 
+        miSiteBrowse.Name = "miSiteBrowse";
+        miSiteBrowse.Size = new Size(233, 22);
+        miSiteBrowse.Text = "&Browse Site in Default Browser";
+        miSiteBrowse.Click += miSiteBrowse_Click;
         // 
         // toolbarMain
         // 
@@ -82,6 +132,16 @@ partial class MainForm
         toolbarMain.Name = "toolbarMain";
         toolbarMain.Size = new Size(800, 25);
         toolbarMain.TabIndex = 1;
+        // 
+        // btnToolbarLoadSite
+        // 
+        btnToolbarLoadSite.Image = (Image)resources.GetObject("btnToolbarLoadSite.Image");
+        btnToolbarLoadSite.ImageTransparentColor = Color.Magenta;
+        btnToolbarLoadSite.Name = "btnToolbarLoadSite";
+        btnToolbarLoadSite.Size = new Size(84, 22);
+        btnToolbarLoadSite.Text = "Load Site...";
+        btnToolbarLoadSite.ToolTipText = "Load another site...";
+        btnToolbarLoadSite.Click += miFileLoadSite_Click;
         // 
         // toolbarNavigation
         // 
@@ -139,19 +199,22 @@ partial class MainForm
         // 
         // statusBar
         // 
-        statusBar.Items.AddRange(new ToolStripItem[] { lblStatusSiteName, lblStatusDirectory, lblStatusUrl });
+        statusBar.Items.AddRange(new ToolStripItem[] { lblStatusSiteName, lblStatusDirectory, lblStatusUrl, lblStatusLogDirectory });
         statusBar.Location = new Point(0, 425);
         statusBar.Name = "statusBar";
+        statusBar.ShowItemToolTips = true;
         statusBar.Size = new Size(800, 25);
         statusBar.TabIndex = 4;
         // 
         // lblStatusSiteName
         // 
+        lblStatusSiteName.AutoToolTip = true;
         lblStatusSiteName.BorderSides = ToolStripStatusLabelBorderSides.Right;
         lblStatusSiteName.BorderStyle = Border3DStyle.Etched;
         lblStatusSiteName.Name = "lblStatusSiteName";
         lblStatusSiteName.Size = new Size(63, 20);
         lblStatusSiteName.Text = "Site name";
+        lblStatusSiteName.ToolTipText = "Site name. Click to copy to clipboard.";
         // 
         // lblStatusDirectory
         // 
@@ -161,25 +224,31 @@ partial class MainForm
         lblStatusDirectory.Name = "lblStatusDirectory";
         lblStatusDirectory.Size = new Size(75, 20);
         lblStatusDirectory.Text = "Directory";
+        lblStatusDirectory.TextAlign = ContentAlignment.MiddleLeft;
+        lblStatusDirectory.ToolTipText = "Site directory. Click to explore.";
+        lblStatusDirectory.Click += miSiteExplore_Click;
         // 
         // lblStatusUrl
         // 
+        lblStatusUrl.BorderSides = ToolStripStatusLabelBorderSides.Right;
+        lblStatusUrl.BorderStyle = Border3DStyle.Etched;
         lblStatusUrl.Image = (Image)resources.GetObject("lblStatusUrl.Image");
         lblStatusUrl.IsLink = true;
         lblStatusUrl.LinkBehavior = LinkBehavior.AlwaysUnderline;
         lblStatusUrl.Name = "lblStatusUrl";
-        lblStatusUrl.Size = new Size(44, 20);
+        lblStatusUrl.Size = new Size(48, 20);
         lblStatusUrl.Text = "URL";
+        lblStatusUrl.ToolTipText = "Site URL. Click to open in the default browser.";
+        lblStatusUrl.Click += miSiteBrowse_Click;
         // 
-        // btnToolbarLoadSite
+        // lblStatusLogDirectory
         // 
-        btnToolbarLoadSite.Image = (Image)resources.GetObject("btnToolbarLoadSite.Image");
-        btnToolbarLoadSite.ImageTransparentColor = Color.Magenta;
-        btnToolbarLoadSite.Name = "btnToolbarLoadSite";
-        btnToolbarLoadSite.Size = new Size(84, 22);
-        btnToolbarLoadSite.Text = "Load &Site...";
-        btnToolbarLoadSite.ToolTipText = "Load another site...";
-        btnToolbarLoadSite.Click += OnLoadSite;
+        lblStatusLogDirectory.AutoToolTip = true;
+        lblStatusLogDirectory.Image = (Image)resources.GetObject("lblStatusLogDirectory.Image");
+        lblStatusLogDirectory.Name = "lblStatusLogDirectory";
+        lblStatusLogDirectory.Size = new Size(97, 20);
+        lblStatusLogDirectory.Text = "Log Directory.";
+        lblStatusLogDirectory.ToolTipText = "Log directory. Click to explore.";
         // 
         // MainForm
         // 
@@ -221,4 +290,9 @@ partial class MainForm
     private ToolStripStatusLabel lblStatusDirectory;
     private ToolStripStatusLabel lblStatusUrl;
     private ToolStripButton btnToolbarLoadSite;
+    private ToolStripMenuItem miFileLoadSite;
+    private ToolStripMenuItem miSiteExplore;
+    private ToolStripMenuItem miSiteBrowse;
+    private ToolStripMenuItem miSiteExploreLogs;
+    private ToolStripStatusLabel lblStatusLogDirectory;
 }
