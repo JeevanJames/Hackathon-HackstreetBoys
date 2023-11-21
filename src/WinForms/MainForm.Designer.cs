@@ -35,16 +35,29 @@ partial class MainForm
         ToolStripMenuItem menuMainSite;
         miFileLoadSite = new ToolStripMenuItem();
         miFileExit = new ToolStripMenuItem();
+        miSiteRestart = new ToolStripMenuItem();
+        miSiteRecycleAppPool = new ToolStripMenuItem();
+        toolStripSeparator1 = new ToolStripSeparator();
         miSiteExplore = new ToolStripMenuItem();
         miSiteExploreLogs = new ToolStripMenuItem();
         miSiteBrowse = new ToolStripMenuItem();
+        menuMainView = new ToolStripMenuItem();
+        miViewConfig = new ToolStripMenuItem();
+        miViewLogging = new ToolStripMenuItem();
+        miViewEvents = new ToolStripMenuItem();
+        miViewBrowser = new ToolStripMenuItem();
+        miViewIisInfo = new ToolStripMenuItem();
         toolbarMain = new ToolStrip();
-        btnToolbarLoadSite = new ToolStripButton();
+        tbtnMainLoadSite = new ToolStripButton();
+        toolStripSeparator2 = new ToolStripSeparator();
+        tbtnMainRestartSite = new ToolStripButton();
+        tbtnMainRecycleAppPool = new ToolStripButton();
         toolbarNavigation = new ToolStrip();
         tsNavConfig = new ToolStripButton();
         tsNavLogging = new ToolStripButton();
         tsNavEventViewer = new ToolStripButton();
         tsNavBrowse = new ToolStripButton();
+        tsNavInfo = new ToolStripButton();
         pnlView = new Panel();
         statusBar = new StatusStrip();
         lblStatusSiteName = new ToolStripStatusLabel();
@@ -52,6 +65,7 @@ partial class MainForm
         lblStatusDirectory = new ToolStripStatusLabel();
         lblStatusUrl = new ToolStripStatusLabel();
         lblStatusLogDirectory = new ToolStripStatusLabel();
+        lblViewHeader = new Label();
         menuMain = new MenuStrip();
         menuMainFile = new ToolStripMenuItem();
         miSeparatorFile1 = new ToolStripSeparator();
@@ -64,7 +78,7 @@ partial class MainForm
         // 
         // menuMain
         // 
-        menuMain.Items.AddRange(new ToolStripItem[] { menuMainFile, menuMainSite });
+        menuMain.Items.AddRange(new ToolStripItem[] { menuMainFile, menuMainSite, menuMainView });
         menuMain.Location = new Point(0, 0);
         menuMain.Name = "menuMain";
         menuMain.Size = new Size(800, 24);
@@ -100,60 +114,166 @@ partial class MainForm
         // 
         // menuMainSite
         // 
-        menuMainSite.DropDownItems.AddRange(new ToolStripItem[] { miSiteExplore, miSiteExploreLogs, miSiteBrowse });
+        menuMainSite.DropDownItems.AddRange(new ToolStripItem[] { miSiteRestart, miSiteRecycleAppPool, toolStripSeparator1, miSiteExplore, miSiteExploreLogs, miSiteBrowse });
         menuMainSite.Name = "menuMainSite";
         menuMainSite.Size = new Size(38, 20);
         menuMainSite.Text = "&Site";
         // 
+        // miSiteRestart
+        // 
+        miSiteRestart.Image = (Image)resources.GetObject("miSiteRestart.Image");
+        miSiteRestart.Name = "miSiteRestart";
+        miSiteRestart.ShortcutKeys = Keys.F5;
+        miSiteRestart.Size = new Size(306, 22);
+        miSiteRestart.Text = "Restart Site";
+        miSiteRestart.Click += miSiteRestart_Click;
+        // 
+        // miSiteRecycleAppPool
+        // 
+        miSiteRecycleAppPool.Image = (Image)resources.GetObject("miSiteRecycleAppPool.Image");
+        miSiteRecycleAppPool.Name = "miSiteRecycleAppPool";
+        miSiteRecycleAppPool.ShortcutKeys = Keys.Control | Keys.F5;
+        miSiteRecycleAppPool.Size = new Size(306, 22);
+        miSiteRecycleAppPool.Text = "Recycle Application Pool";
+        miSiteRecycleAppPool.Click += miSiteRecycleAppPool_Click;
+        // 
+        // toolStripSeparator1
+        // 
+        toolStripSeparator1.Name = "toolStripSeparator1";
+        toolStripSeparator1.Size = new Size(303, 6);
+        // 
         // miSiteExplore
         // 
         miSiteExplore.Name = "miSiteExplore";
-        miSiteExplore.Size = new Size(233, 22);
+        miSiteExplore.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D;
+        miSiteExplore.Size = new Size(306, 22);
         miSiteExplore.Text = "&Explore Directory";
         miSiteExplore.Click += miSiteExplore_Click;
         // 
         // miSiteExploreLogs
         // 
         miSiteExploreLogs.Name = "miSiteExploreLogs";
-        miSiteExploreLogs.Size = new Size(233, 22);
+        miSiteExploreLogs.ShortcutKeys = Keys.Control | Keys.Shift | Keys.L;
+        miSiteExploreLogs.Size = new Size(306, 22);
         miSiteExploreLogs.Text = "Explorer Log Directory";
         miSiteExploreLogs.Click += miSiteExploreLogs_Click;
         // 
         // miSiteBrowse
         // 
         miSiteBrowse.Name = "miSiteBrowse";
-        miSiteBrowse.Size = new Size(233, 22);
+        miSiteBrowse.ShortcutKeys = Keys.Control | Keys.Shift | Keys.B;
+        miSiteBrowse.Size = new Size(306, 22);
         miSiteBrowse.Text = "&Browse Site in Default Browser";
         miSiteBrowse.Click += miSiteBrowse_Click;
+        // 
+        // menuMainView
+        // 
+        menuMainView.DropDownItems.AddRange(new ToolStripItem[] { miViewConfig, miViewLogging, miViewEvents, miViewBrowser, miViewIisInfo });
+        menuMainView.Name = "menuMainView";
+        menuMainView.Size = new Size(44, 20);
+        menuMainView.Text = "&View";
+        // 
+        // miViewConfig
+        // 
+        miViewConfig.Name = "miViewConfig";
+        miViewConfig.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D1;
+        miViewConfig.Size = new Size(241, 22);
+        miViewConfig.Tag = "1";
+        miViewConfig.Text = "&Configuration";
+        miViewConfig.Click += menuView_Click;
+        // 
+        // miViewLogging
+        // 
+        miViewLogging.Name = "miViewLogging";
+        miViewLogging.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D2;
+        miViewLogging.Size = new Size(241, 22);
+        miViewLogging.Tag = "2";
+        miViewLogging.Text = "&Logging";
+        miViewLogging.Click += menuView_Click;
+        // 
+        // miViewEvents
+        // 
+        miViewEvents.Name = "miViewEvents";
+        miViewEvents.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D3;
+        miViewEvents.Size = new Size(241, 22);
+        miViewEvents.Tag = "3";
+        miViewEvents.Text = "&Event Viewer Logs";
+        miViewEvents.Click += menuView_Click;
+        // 
+        // miViewBrowser
+        // 
+        miViewBrowser.Name = "miViewBrowser";
+        miViewBrowser.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D4;
+        miViewBrowser.Size = new Size(241, 22);
+        miViewBrowser.Tag = "4";
+        miViewBrowser.Text = "&Browser";
+        miViewBrowser.Click += menuView_Click;
+        // 
+        // miViewIisInfo
+        // 
+        miViewIisInfo.Name = "miViewIisInfo";
+        miViewIisInfo.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D5;
+        miViewIisInfo.Size = new Size(241, 22);
+        miViewIisInfo.Tag = "5";
+        miViewIisInfo.Text = "IIS Information";
+        miViewIisInfo.Click += menuView_Click;
         // 
         // toolbarMain
         // 
         toolbarMain.GripStyle = ToolStripGripStyle.Hidden;
-        toolbarMain.Items.AddRange(new ToolStripItem[] { btnToolbarLoadSite });
+        toolbarMain.Items.AddRange(new ToolStripItem[] { tbtnMainLoadSite, toolStripSeparator2, tbtnMainRestartSite, tbtnMainRecycleAppPool });
         toolbarMain.Location = new Point(0, 24);
         toolbarMain.Name = "toolbarMain";
-        toolbarMain.Size = new Size(800, 25);
+        toolbarMain.Size = new Size(800, 33);
         toolbarMain.TabIndex = 1;
         // 
-        // btnToolbarLoadSite
+        // tbtnMainLoadSite
         // 
-        btnToolbarLoadSite.Image = (Image)resources.GetObject("btnToolbarLoadSite.Image");
-        btnToolbarLoadSite.ImageTransparentColor = Color.Magenta;
-        btnToolbarLoadSite.Name = "btnToolbarLoadSite";
-        btnToolbarLoadSite.Size = new Size(84, 22);
-        btnToolbarLoadSite.Text = "Load Site...";
-        btnToolbarLoadSite.ToolTipText = "Load another site...";
-        btnToolbarLoadSite.Click += miFileLoadSite_Click;
+        tbtnMainLoadSite.AutoSize = false;
+        tbtnMainLoadSite.Image = (Image)resources.GetObject("tbtnMainLoadSite.Image");
+        tbtnMainLoadSite.ImageTransparentColor = Color.Magenta;
+        tbtnMainLoadSite.Name = "tbtnMainLoadSite";
+        tbtnMainLoadSite.Size = new Size(84, 30);
+        tbtnMainLoadSite.Text = "Load Site...";
+        tbtnMainLoadSite.ToolTipText = "Load another site...";
+        tbtnMainLoadSite.Click += miFileLoadSite_Click;
+        // 
+        // toolStripSeparator2
+        // 
+        toolStripSeparator2.Name = "toolStripSeparator2";
+        toolStripSeparator2.Size = new Size(6, 33);
+        // 
+        // tbtnMainRestartSite
+        // 
+        tbtnMainRestartSite.AutoSize = false;
+        tbtnMainRestartSite.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        tbtnMainRestartSite.Image = (Image)resources.GetObject("tbtnMainRestartSite.Image");
+        tbtnMainRestartSite.ImageTransparentColor = Color.Magenta;
+        tbtnMainRestartSite.Name = "tbtnMainRestartSite";
+        tbtnMainRestartSite.Size = new Size(30, 30);
+        tbtnMainRestartSite.Text = "Restart Site";
+        tbtnMainRestartSite.Click += miSiteRestart_Click;
+        // 
+        // tbtnMainRecycleAppPool
+        // 
+        tbtnMainRecycleAppPool.AutoSize = false;
+        tbtnMainRecycleAppPool.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        tbtnMainRecycleAppPool.Image = (Image)resources.GetObject("tbtnMainRecycleAppPool.Image");
+        tbtnMainRecycleAppPool.ImageTransparentColor = Color.Magenta;
+        tbtnMainRecycleAppPool.Name = "tbtnMainRecycleAppPool";
+        tbtnMainRecycleAppPool.Size = new Size(30, 30);
+        tbtnMainRecycleAppPool.Text = "Recycle Application Pool";
+        tbtnMainRecycleAppPool.Click += miSiteRecycleAppPool_Click;
         // 
         // toolbarNavigation
         // 
         toolbarNavigation.BackColor = SystemColors.ControlDark;
         toolbarNavigation.Dock = DockStyle.Left;
         toolbarNavigation.GripStyle = ToolStripGripStyle.Hidden;
-        toolbarNavigation.Items.AddRange(new ToolStripItem[] { tsNavConfig, tsNavLogging, tsNavEventViewer, tsNavBrowse });
-        toolbarNavigation.Location = new Point(0, 49);
+        toolbarNavigation.Items.AddRange(new ToolStripItem[] { tsNavConfig, tsNavLogging, tsNavEventViewer, tsNavBrowse, tsNavInfo });
+        toolbarNavigation.Location = new Point(0, 57);
         toolbarNavigation.Name = "toolbarNavigation";
-        toolbarNavigation.Size = new Size(41, 376);
+        toolbarNavigation.Size = new Size(41, 368);
         toolbarNavigation.TabIndex = 2;
         toolbarNavigation.Text = "Configuration";
         // 
@@ -165,8 +285,9 @@ partial class MainForm
         tsNavConfig.ImageTransparentColor = Color.Magenta;
         tsNavConfig.Name = "tsNavConfig";
         tsNavConfig.Size = new Size(40, 40);
+        tsNavConfig.Tag = "1";
         tsNavConfig.Text = "Configuration";
-        tsNavConfig.Click += toolboxNavigation_Click;
+        tsNavConfig.Click += menuView_Click;
         // 
         // tsNavLogging
         // 
@@ -176,8 +297,9 @@ partial class MainForm
         tsNavLogging.ImageTransparentColor = Color.Magenta;
         tsNavLogging.Name = "tsNavLogging";
         tsNavLogging.Size = new Size(40, 40);
+        tsNavLogging.Tag = "2";
         tsNavLogging.Text = "Logging";
-        tsNavLogging.Click += toolboxNavigation_Click;
+        tsNavLogging.Click += menuView_Click;
         // 
         // tsNavEventViewer
         // 
@@ -187,9 +309,10 @@ partial class MainForm
         tsNavEventViewer.ImageTransparentColor = Color.Magenta;
         tsNavEventViewer.Name = "tsNavEventViewer";
         tsNavEventViewer.Size = new Size(40, 40);
+        tsNavEventViewer.Tag = "3";
         tsNavEventViewer.Text = "Event Viewer";
         tsNavEventViewer.ToolTipText = "Event Viewer";
-        tsNavEventViewer.Click += toolboxNavigation_Click;
+        tsNavEventViewer.Click += menuView_Click;
         // 
         // tsNavBrowse
         // 
@@ -199,16 +322,30 @@ partial class MainForm
         tsNavBrowse.ImageTransparentColor = Color.Magenta;
         tsNavBrowse.Name = "tsNavBrowse";
         tsNavBrowse.Size = new Size(40, 40);
+        tsNavBrowse.Tag = "4";
         tsNavBrowse.Text = "Browse";
-        tsNavBrowse.Click += toolboxNavigation_Click;
+        tsNavBrowse.Click += menuView_Click;
+        // 
+        // tsNavInfo
+        // 
+        tsNavInfo.AutoSize = false;
+        tsNavInfo.CheckOnClick = true;
+        tsNavInfo.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        tsNavInfo.Image = (Image)resources.GetObject("tsNavInfo.Image");
+        tsNavInfo.ImageTransparentColor = Color.Magenta;
+        tsNavInfo.Name = "tsNavInfo";
+        tsNavInfo.Size = new Size(40, 40);
+        tsNavInfo.Tag = "5";
+        tsNavInfo.Text = "IIS Information";
+        tsNavInfo.Click += menuView_Click;
         // 
         // pnlView
         // 
         pnlView.BorderStyle = BorderStyle.Fixed3D;
         pnlView.Dock = DockStyle.Fill;
-        pnlView.Location = new Point(41, 49);
+        pnlView.Location = new Point(41, 92);
         pnlView.Name = "pnlView";
-        pnlView.Size = new Size(759, 376);
+        pnlView.Size = new Size(759, 333);
         pnlView.TabIndex = 3;
         // 
         // statusBar
@@ -275,22 +412,33 @@ partial class MainForm
         lblStatusLogDirectory.ToolTipText = "Log directory. Click to explore.";
         lblStatusLogDirectory.Click += miSiteExploreLogs_Click;
         // 
+        // lblViewHeader
+        // 
+        lblViewHeader.BackColor = SystemColors.Highlight;
+        lblViewHeader.Dock = DockStyle.Top;
+        lblViewHeader.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point);
+        lblViewHeader.ForeColor = SystemColors.HighlightText;
+        lblViewHeader.Location = new Point(41, 57);
+        lblViewHeader.Name = "lblViewHeader";
+        lblViewHeader.Padding = new Padding(5);
+        lblViewHeader.Size = new Size(759, 35);
+        lblViewHeader.TabIndex = 5;
+        // 
         // MainForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(800, 450);
         Controls.Add(pnlView);
+        Controls.Add(lblViewHeader);
         Controls.Add(toolbarNavigation);
         Controls.Add(toolbarMain);
         Controls.Add(menuMain);
         Controls.Add(statusBar);
-        KeyPreview = true;
         MainMenuStrip = menuMain;
         Name = "MainForm";
         Text = "DOP Troubleshooter";
         Load += MainForm_Load;
-        KeyDown += MainForm_KeyDown;
         menuMain.ResumeLayout(false);
         menuMain.PerformLayout();
         toolbarMain.ResumeLayout(false);
@@ -316,7 +464,7 @@ partial class MainForm
     private ToolStripStatusLabel lblStatusSiteName;
     private ToolStripStatusLabel lblStatusDirectory;
     private ToolStripStatusLabel lblStatusUrl;
-    private ToolStripButton btnToolbarLoadSite;
+    private ToolStripButton tbtnMainLoadSite;
     private ToolStripMenuItem miFileLoadSite;
     private ToolStripMenuItem miSiteExplore;
     private ToolStripMenuItem miSiteBrowse;
@@ -324,4 +472,18 @@ partial class MainForm
     private ToolStripStatusLabel lblStatusLogDirectory;
     private ToolStripButton tsNavEventViewer;
     private ToolStripStatusLabel lblStatusAppPool;
+    private ToolStripMenuItem miSiteRestart;
+    private ToolStripMenuItem miSiteRecycleAppPool;
+    private ToolStripSeparator toolStripSeparator1;
+    private ToolStripSeparator toolStripSeparator2;
+    private ToolStripButton tbtnMainRestartSite;
+    private ToolStripButton tbtnMainRecycleAppPool;
+    private ToolStripMenuItem menuMainView;
+    private ToolStripMenuItem miViewConfig;
+    private ToolStripMenuItem miViewLogging;
+    private ToolStripMenuItem miViewEvents;
+    private ToolStripMenuItem miViewBrowser;
+    private ToolStripMenuItem miViewIisInfo;
+    private ToolStripButton tsNavInfo;
+    private Label lblViewHeader;
 }

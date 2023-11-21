@@ -35,8 +35,11 @@ partial class BrowserView
         tbtnBrowserForward = new ToolStripButton();
         tbtnBrowserHome = new ToolStripButton();
         tbtnBrowserRefresh = new ToolStripButton();
+        toolStripSeparator1 = new ToolStripSeparator();
+        tbtnBrowserDevTools = new ToolStripButton();
         statusStrip = new StatusStrip();
         tslblAddress = new ToolStripStatusLabel();
+        tsProgress = new ToolStripProgressBar();
         ((System.ComponentModel.ISupportInitialize)browser).BeginInit();
         toolStripBrowser.SuspendLayout();
         statusStrip.SuspendLayout();
@@ -53,12 +56,14 @@ partial class BrowserView
         browser.Size = new Size(816, 502);
         browser.TabIndex = 1;
         browser.ZoomFactor = 1D;
+        browser.NavigationStarting += browser_NavigationStarting;
+        browser.NavigationCompleted += browser_NavigationCompleted;
         browser.SourceChanged += browser_SourceChanged;
         // 
         // toolStripBrowser
         // 
         toolStripBrowser.GripStyle = ToolStripGripStyle.Hidden;
-        toolStripBrowser.Items.AddRange(new ToolStripItem[] { tbtnBrowserBack, tbtnBrowserForward, tbtnBrowserHome, tbtnBrowserRefresh });
+        toolStripBrowser.Items.AddRange(new ToolStripItem[] { tbtnBrowserBack, tbtnBrowserForward, tbtnBrowserHome, tbtnBrowserRefresh, toolStripSeparator1, tbtnBrowserDevTools });
         toolStripBrowser.Location = new Point(0, 0);
         toolStripBrowser.Name = "toolStripBrowser";
         toolStripBrowser.Size = new Size(816, 43);
@@ -109,9 +114,26 @@ partial class BrowserView
         tbtnBrowserRefresh.Text = "Refresh";
         tbtnBrowserRefresh.Click += tbtnBrowserRefresh_Click;
         // 
+        // toolStripSeparator1
+        // 
+        toolStripSeparator1.Name = "toolStripSeparator1";
+        toolStripSeparator1.Size = new Size(6, 43);
+        // 
+        // tbtnBrowserDevTools
+        // 
+        tbtnBrowserDevTools.AutoSize = false;
+        tbtnBrowserDevTools.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        tbtnBrowserDevTools.Image = (Image)resources.GetObject("tbtnBrowserDevTools.Image");
+        tbtnBrowserDevTools.ImageTransparentColor = Color.Magenta;
+        tbtnBrowserDevTools.Name = "tbtnBrowserDevTools";
+        tbtnBrowserDevTools.Size = new Size(40, 40);
+        tbtnBrowserDevTools.Text = "Developer Tools";
+        tbtnBrowserDevTools.ToolTipText = "Display developer tools";
+        tbtnBrowserDevTools.Click += tbtnBrowserDevTools_Click;
+        // 
         // statusStrip
         // 
-        statusStrip.Items.AddRange(new ToolStripItem[] { tslblAddress });
+        statusStrip.Items.AddRange(new ToolStripItem[] { tslblAddress, tsProgress });
         statusStrip.Location = new Point(0, 545);
         statusStrip.Name = "statusStrip";
         statusStrip.Size = new Size(816, 22);
@@ -125,12 +147,19 @@ partial class BrowserView
         tslblAddress.ImageAlign = ContentAlignment.MiddleLeft;
         tslblAddress.IsLink = true;
         tslblAddress.Name = "tslblAddress";
-        tslblAddress.Size = new Size(770, 17);
+        tslblAddress.Size = new Size(668, 17);
         tslblAddress.Spring = true;
         tslblAddress.Text = "Current address";
         tslblAddress.TextAlign = ContentAlignment.MiddleLeft;
         tslblAddress.ToolTipText = "Current address. Click to browse to this address in the default web browser.";
         tslblAddress.Click += tslblAddress_Click;
+        // 
+        // tsProgress
+        // 
+        tsProgress.Name = "tsProgress";
+        tsProgress.Size = new Size(100, 16);
+        tsProgress.Style = ProgressBarStyle.Marquee;
+        tsProgress.Visible = false;
         // 
         // BrowserView
         // 
@@ -161,4 +190,7 @@ partial class BrowserView
     private ToolStripButton tbtnBrowserRefresh;
     private StatusStrip statusStrip;
     private ToolStripStatusLabel tslblAddress;
+    private ToolStripProgressBar tsProgress;
+    private ToolStripSeparator toolStripSeparator1;
+    private ToolStripButton tbtnBrowserDevTools;
 }

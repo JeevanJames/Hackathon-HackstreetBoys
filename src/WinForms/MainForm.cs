@@ -1,6 +1,14 @@
 using System.Diagnostics;
 
 using Hackathon.HackstreetBoys.WinForms.EventViewer;
+using Hackathon.HackstreetBoys.WinForms.IisInfo;
+
+using Microsoft.Web.Administration;
+
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+
+using Application = System.Windows.Forms.Application;
 
 namespace Hackathon.HackstreetBoys.WinForms;
 
@@ -20,22 +28,6 @@ public partial class MainForm : Form
             Application.Exit();
     }
 
-    private void MainForm_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.KeyCode < Keys.D0 || e.KeyCode > Keys.D9 || !e.Control)
-            return;
-        if (!int.TryParse(e.KeyCode.ToString()[1..], out int number))
-            return;
-        if (number < 1 || number > toolbarNavigation.Items.Count)
-            return;
-        if (e is { Alt: false, Shift: false })
-        {
-            toolbarNavigation.Items[number - 1].PerformClick();
-            e.SuppressKeyPress = true;
-            e.Handled = true;
-        }
-    }
-
     private void miFileExit_Click(object sender, EventArgs e)
     {
         Close();
@@ -44,6 +36,21 @@ public partial class MainForm : Form
     private void miFileLoadSite_Click(object sender, EventArgs e)
     {
         LoadSite();
+    }
+
+    private void miSiteRestart_Click(object sender, EventArgs e)
+    {
+        using ServerManager manager = new();
+        Site site = manager.Sites[_details.Site];
+        site.Stop();
+        site.Start();
+    }
+
+    private void miSiteRecycleAppPool_Click(object sender, EventArgs e)
+    {
+        using ServerManager manager = new();
+        string appPoolName = manager.Sites[_details.Site].Applications["/"].ApplicationPoolName;
+        manager.ApplicationPools[appPoolName].Recycle();
     }
 
     private void miSiteExplore_Click(object sender, EventArgs e)
@@ -61,11 +68,9 @@ public partial class MainForm : Form
         Process.Start(new ProcessStartInfo(_details.Url) { UseShellExecute = true });
     }
 
-    private void toolboxNavigation_Click(object sender, EventArgs e)
+    private void menuView_Click(object sender, EventArgs e)
     {
-        if (sender is not ToolStripButton button)
-            throw new InvalidOperationException("Clicked item is not a tool strip button");
-        ActivateNavView(button);
+        ActivateNavView(sender);
     }
 
     private bool LoadSite()
@@ -89,8 +94,11 @@ public partial class MainForm : Form
         return true;
     }
 
-    private void ActivateNavView(ToolStripButton navButton)
+    private void ActivateNavView(object sender)
     {
+        var control = (ToolStripItem)sender;
+        string index = (string)control.Tag;
+
         if (_currentView is not null)
         {
             pnlView.Controls.RemoveAt(0);
@@ -98,24 +106,30 @@ public partial class MainForm : Form
             _currentView = null;
         }
 
-        _currentView = navButton.Name switch
+        _currentView = index switch
         {
-            nameof(tsNavConfig) => new ConfigView { Details = _details },
-            nameof(tsNavLogging) => new LoggingView { Details = _details },
-            nameof(tsNavEventViewer) => new EventViewerView(),
-            nameof(tsNavBrowse) => new BrowserView { Details = _details },
-            _ => throw new InvalidOperationException($"Unrecognized navigation button {navButton.Name}."),
+            "1" => new ConfigView { Details = _details },
+            "2" => new LoggingView { Details = _details },
+            "3" => new EventViewerView(),
+            "4" => new BrowserView { Details = _details },
+            "5" => new IisInfoView(),
+            _ => throw new InvalidOperationException($"Unrecognized navigation button {index}."),
         };
+
         _currentView.Dock = DockStyle.Fill;
         pnlView.Controls.Add(_currentView);
 
+        lblViewHeader.Text = control.Text;
+
+        foreach (ToolStripMenuItem menu in menuMainView.DropDownItems.OfType<ToolStripMenuItem>())
+            menu.Checked = string.Equals(index, (string)menu.Tag);
+
         foreach (ToolStripButton btn in toolbarNavigation.Items.OfType<ToolStripButton>())
-            btn.Checked = false;
-        navButton.Checked = true;
+            btn.Checked = string.Equals(index, (string)btn.Tag);
     }
 
     private void ActivateFirstNavView()
     {
-        ActivateNavView(toolbarNavigation.Items.OfType<ToolStripButton>().First());
+        ActivateNavView(menuMainView.DropDownItems.OfType<ToolStripMenuItem>().First());
     }
 }

@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
 
+using Microsoft.Web.Administration;
+
 namespace Hackathon.HackstreetBoys.WinForms;
 public partial class BrowserView : UserControl
 {
@@ -18,6 +20,16 @@ public partial class BrowserView : UserControl
     private void browser_SourceChanged(object sender, Microsoft.Web.WebView2.Core.CoreWebView2SourceChangedEventArgs e)
     {
         tslblAddress.Text = browser.Source.ToString();
+    }
+
+    private void browser_NavigationStarting(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
+    {
+        tsProgress.Visible = true;
+    }
+
+    private void browser_NavigationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs e)
+    {
+        tsProgress.Visible = false;
     }
 
     private void tbtnBrowserBack_Click(object sender, EventArgs e)
@@ -40,13 +52,20 @@ public partial class BrowserView : UserControl
         browser.Refresh();
     }
 
-    private void GoHome()
-    {
-        browser.Source = new Uri(Details.Url, UriKind.Absolute);
-    }
-
     private void tslblAddress_Click(object sender, EventArgs e)
     {
         Process.Start(new ProcessStartInfo(browser.Source.AbsoluteUri) { UseShellExecute = true });
+    }
+
+    private async void tbtnBrowserDevTools_Click(object sender, EventArgs e)
+    {
+        await browser.EnsureCoreWebView2Async();
+        browser.CoreWebView2.OpenDevToolsWindow();
+        browser.CoreWebView2.OpenTaskManagerWindow();
+    }
+
+    private void GoHome()
+    {
+        browser.Source = new Uri(Details.Url, UriKind.Absolute);
     }
 }
