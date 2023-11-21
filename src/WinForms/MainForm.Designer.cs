@@ -43,10 +43,12 @@ partial class MainForm
         toolbarNavigation = new ToolStrip();
         tsNavConfig = new ToolStripButton();
         tsNavLogging = new ToolStripButton();
+        tsNavEventViewer = new ToolStripButton();
         tsNavBrowse = new ToolStripButton();
         pnlView = new Panel();
         statusBar = new StatusStrip();
         lblStatusSiteName = new ToolStripStatusLabel();
+        lblStatusAppPool = new ToolStripStatusLabel();
         lblStatusDirectory = new ToolStripStatusLabel();
         lblStatusUrl = new ToolStripStatusLabel();
         lblStatusLogDirectory = new ToolStripStatusLabel();
@@ -148,7 +150,7 @@ partial class MainForm
         toolbarNavigation.BackColor = SystemColors.ControlDark;
         toolbarNavigation.Dock = DockStyle.Left;
         toolbarNavigation.GripStyle = ToolStripGripStyle.Hidden;
-        toolbarNavigation.Items.AddRange(new ToolStripItem[] { tsNavConfig, tsNavLogging, tsNavBrowse });
+        toolbarNavigation.Items.AddRange(new ToolStripItem[] { tsNavConfig, tsNavLogging, tsNavEventViewer, tsNavBrowse });
         toolbarNavigation.Location = new Point(0, 49);
         toolbarNavigation.Name = "toolbarNavigation";
         toolbarNavigation.Size = new Size(41, 376);
@@ -177,6 +179,18 @@ partial class MainForm
         tsNavLogging.Text = "Logging";
         tsNavLogging.Click += toolboxNavigation_Click;
         // 
+        // tsNavEventViewer
+        // 
+        tsNavEventViewer.AutoSize = false;
+        tsNavEventViewer.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        tsNavEventViewer.Image = (Image)resources.GetObject("tsNavEventViewer.Image");
+        tsNavEventViewer.ImageTransparentColor = Color.Magenta;
+        tsNavEventViewer.Name = "tsNavEventViewer";
+        tsNavEventViewer.Size = new Size(40, 40);
+        tsNavEventViewer.Text = "Event Viewer";
+        tsNavEventViewer.ToolTipText = "Event Viewer";
+        tsNavEventViewer.Click += toolboxNavigation_Click;
+        // 
         // tsNavBrowse
         // 
         tsNavBrowse.AutoSize = false;
@@ -199,7 +213,7 @@ partial class MainForm
         // 
         // statusBar
         // 
-        statusBar.Items.AddRange(new ToolStripItem[] { lblStatusSiteName, lblStatusDirectory, lblStatusUrl, lblStatusLogDirectory });
+        statusBar.Items.AddRange(new ToolStripItem[] { lblStatusSiteName, lblStatusAppPool, lblStatusDirectory, lblStatusUrl, lblStatusLogDirectory });
         statusBar.Location = new Point(0, 425);
         statusBar.Name = "statusBar";
         statusBar.ShowItemToolTips = true;
@@ -215,6 +229,16 @@ partial class MainForm
         lblStatusSiteName.Size = new Size(63, 20);
         lblStatusSiteName.Text = "Site name";
         lblStatusSiteName.ToolTipText = "Site name. Click to copy to clipboard.";
+        // 
+        // lblStatusAppPool
+        // 
+        lblStatusAppPool.BorderSides = ToolStripStatusLabelBorderSides.Right;
+        lblStatusAppPool.BorderStyle = Border3DStyle.Etched;
+        lblStatusAppPool.Image = (Image)resources.GetObject("lblStatusAppPool.Image");
+        lblStatusAppPool.Name = "lblStatusAppPool";
+        lblStatusAppPool.Size = new Size(115, 20);
+        lblStatusAppPool.Text = "Application Pool";
+        lblStatusAppPool.ToolTipText = "Application pool";
         // 
         // lblStatusDirectory
         // 
@@ -249,6 +273,7 @@ partial class MainForm
         lblStatusLogDirectory.Size = new Size(97, 20);
         lblStatusLogDirectory.Text = "Log Directory.";
         lblStatusLogDirectory.ToolTipText = "Log directory. Click to explore.";
+        lblStatusLogDirectory.Click += miSiteExploreLogs_Click;
         // 
         // MainForm
         // 
@@ -260,10 +285,12 @@ partial class MainForm
         Controls.Add(toolbarMain);
         Controls.Add(menuMain);
         Controls.Add(statusBar);
+        KeyPreview = true;
         MainMenuStrip = menuMain;
         Name = "MainForm";
         Text = "DOP Troubleshooter";
         Load += MainForm_Load;
+        KeyDown += MainForm_KeyDown;
         menuMain.ResumeLayout(false);
         menuMain.PerformLayout();
         toolbarMain.ResumeLayout(false);
@@ -295,4 +322,6 @@ partial class MainForm
     private ToolStripMenuItem miSiteBrowse;
     private ToolStripMenuItem miSiteExploreLogs;
     private ToolStripStatusLabel lblStatusLogDirectory;
+    private ToolStripButton tsNavEventViewer;
+    private ToolStripStatusLabel lblStatusAppPool;
 }

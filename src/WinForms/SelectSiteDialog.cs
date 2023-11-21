@@ -125,9 +125,11 @@ public partial class SelectSiteDialog : Form
         using ServerManager manager = new();
 
         Site site = manager.Sites[siteName];
+        string appPool = site.Applications["/"].ApplicationPoolName;
         string directory = site.Applications["/"].VirtualDirectories["/"].PhysicalPath;
 
         _details = new SiteDetails(siteName,
+            appPool,
             directory,
             GetLogDirectory(directory),
             GetUrl());

@@ -1,5 +1,7 @@
 using System.Diagnostics;
 
+using Hackathon.HackstreetBoys.WinForms.EventViewer;
+
 namespace Hackathon.HackstreetBoys.WinForms;
 
 public partial class MainForm : Form
@@ -18,6 +20,22 @@ public partial class MainForm : Form
             Application.Exit();
     }
 
+    private void MainForm_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode < Keys.D0 || e.KeyCode > Keys.D9 || !e.Control)
+            return;
+        if (!int.TryParse(e.KeyCode.ToString()[1..], out int number))
+            return;
+        if (number < 1 || number > toolbarNavigation.Items.Count)
+            return;
+        if (e is { Alt: false, Shift: false })
+        {
+            toolbarNavigation.Items[number - 1].PerformClick();
+            e.SuppressKeyPress = true;
+            e.Handled = true;
+        }
+    }
+
     private void miFileExit_Click(object sender, EventArgs e)
     {
         Close();
@@ -26,6 +44,21 @@ public partial class MainForm : Form
     private void miFileLoadSite_Click(object sender, EventArgs e)
     {
         LoadSite();
+    }
+
+    private void miSiteExplore_Click(object sender, EventArgs e)
+    {
+        Process.Start("explorer.exe", _details.Directory);
+    }
+
+    private void miSiteExploreLogs_Click(object sender, EventArgs e)
+    {
+        Process.Start("explorer.exe", _details.LogDirectory);
+    }
+
+    private void miSiteBrowse_Click(object sender, EventArgs e)
+    {
+        Process.Start(new ProcessStartInfo(_details.Url) { UseShellExecute = true });
     }
 
     private void toolboxNavigation_Click(object sender, EventArgs e)
@@ -46,6 +79,7 @@ public partial class MainForm : Form
         _details = dlgSelectSite.GetResult();
 
         lblStatusSiteName.Text = _details.Site;
+        lblStatusAppPool.Text = _details.AppPool;
         lblStatusDirectory.Text = _details.Directory;
         lblStatusUrl.Text = _details.Url;
         lblStatusLogDirectory.Text = _details.LogDirectory;
@@ -67,8 +101,9 @@ public partial class MainForm : Form
         _currentView = navButton.Name switch
         {
             nameof(tsNavConfig) => new ConfigView { Details = _details },
-            nameof(tsNavLogging) => new LoggingView(),
-            nameof(tsNavBrowse) => new BrowserView(),
+            nameof(tsNavLogging) => new LoggingView { Details = _details },
+            nameof(tsNavEventViewer) => new EventViewerView(),
+            nameof(tsNavBrowse) => new BrowserView { Details = _details },
             _ => throw new InvalidOperationException($"Unrecognized navigation button {navButton.Name}."),
         };
         _currentView.Dock = DockStyle.Fill;
@@ -82,20 +117,5 @@ public partial class MainForm : Form
     private void ActivateFirstNavView()
     {
         ActivateNavView(toolbarNavigation.Items.OfType<ToolStripButton>().First());
-    }
-
-    private void miSiteExplore_Click(object sender, EventArgs e)
-    {
-        Process.Start("explorer.exe", _details.Directory);
-    }
-
-    private void miSiteExploreLogs_Click(object sender, EventArgs e)
-    {
-        Process.Start("explorer.exe", _details.LogDirectory);
-    }
-
-    private void miSiteBrowse_Click(object sender, EventArgs e)
-    {
-        Process.Start(new ProcessStartInfo(_details.Url) { UseShellExecute = true });
     }
 }
