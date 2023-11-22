@@ -47,6 +47,7 @@ partial class MainForm
         miViewEvents = new ToolStripMenuItem();
         miViewBrowser = new ToolStripMenuItem();
         miViewIisInfo = new ToolStripMenuItem();
+        miViewInternetExplorerBrowser = new ToolStripMenuItem();
         toolbarMain = new ToolStrip();
         tbtnMainLoadSite = new ToolStripButton();
         toolStripSeparator2 = new ToolStripSeparator();
@@ -168,7 +169,7 @@ partial class MainForm
         // 
         // menuMainView
         // 
-        menuMainView.DropDownItems.AddRange(new ToolStripItem[] { miViewConfig, miViewLogging, miViewEvents, miViewBrowser, miViewIisInfo });
+        menuMainView.DropDownItems.AddRange(new ToolStripItem[] { miViewConfig, miViewLogging, miViewEvents, miViewBrowser, miViewIisInfo, miViewInternetExplorerBrowser });
         menuMainView.Name = "menuMainView";
         menuMainView.Size = new Size(44, 20);
         menuMainView.Text = "&View";
@@ -177,7 +178,7 @@ partial class MainForm
         // 
         miViewConfig.Name = "miViewConfig";
         miViewConfig.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D1;
-        miViewConfig.Size = new Size(241, 22);
+        miViewConfig.Size = new Size(278, 22);
         miViewConfig.Tag = "1";
         miViewConfig.Text = "&Configuration";
         miViewConfig.Click += menuView_Click;
@@ -186,7 +187,7 @@ partial class MainForm
         // 
         miViewLogging.Name = "miViewLogging";
         miViewLogging.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D2;
-        miViewLogging.Size = new Size(241, 22);
+        miViewLogging.Size = new Size(278, 22);
         miViewLogging.Tag = "2";
         miViewLogging.Text = "&Logging";
         miViewLogging.Click += menuView_Click;
@@ -195,7 +196,7 @@ partial class MainForm
         // 
         miViewEvents.Name = "miViewEvents";
         miViewEvents.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D3;
-        miViewEvents.Size = new Size(241, 22);
+        miViewEvents.Size = new Size(278, 22);
         miViewEvents.Tag = "3";
         miViewEvents.Text = "&Event Viewer Logs";
         miViewEvents.Click += menuView_Click;
@@ -204,7 +205,7 @@ partial class MainForm
         // 
         miViewBrowser.Name = "miViewBrowser";
         miViewBrowser.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D4;
-        miViewBrowser.Size = new Size(241, 22);
+        miViewBrowser.Size = new Size(278, 22);
         miViewBrowser.Tag = "4";
         miViewBrowser.Text = "&Browser";
         miViewBrowser.Click += menuView_Click;
@@ -213,10 +214,19 @@ partial class MainForm
         // 
         miViewIisInfo.Name = "miViewIisInfo";
         miViewIisInfo.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D5;
-        miViewIisInfo.Size = new Size(241, 22);
+        miViewIisInfo.Size = new Size(278, 22);
         miViewIisInfo.Tag = "5";
         miViewIisInfo.Text = "IIS Information";
         miViewIisInfo.Click += menuView_Click;
+        // 
+        // miViewInternetExplorerBrowser
+        // 
+        miViewInternetExplorerBrowser.Name = "miViewInternetExplorerBrowser";
+        miViewInternetExplorerBrowser.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D6;
+        miViewInternetExplorerBrowser.Size = new Size(278, 22);
+        miViewInternetExplorerBrowser.Tag = "6";
+        miViewInternetExplorerBrowser.Text = "Internet Explorer Browser";
+        miViewInternetExplorerBrowser.Click += menuView_Click;
         // 
         // toolbarMain
         // 
@@ -486,4 +496,5 @@ partial class MainForm
     private ToolStripMenuItem miViewIisInfo;
     private ToolStripButton tsNavInfo;
     private Label lblViewHeader;
+    private ToolStripMenuItem miViewInternetExplorerBrowser;
 }

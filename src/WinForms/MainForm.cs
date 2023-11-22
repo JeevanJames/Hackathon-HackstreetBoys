@@ -2,6 +2,7 @@ using System.Diagnostics;
 
 using Hackathon.HackstreetBoys.WinForms.EventViewer;
 using Hackathon.HackstreetBoys.WinForms.IisInfo;
+using Hackathon.HackstreetBoys.WinForms.InternetExplorerBrowser;
 
 using Microsoft.Web.Administration;
 
@@ -113,6 +114,7 @@ public partial class MainForm : Form
             "3" => new EventViewerView(),
             "4" => new BrowserView { Details = _details },
             "5" => new IisInfoView(),
+            "6" => new InternetExplorerBrowserView { Details = _details },
             _ => throw new InvalidOperationException($"Unrecognized navigation button {index}."),
         };
 
