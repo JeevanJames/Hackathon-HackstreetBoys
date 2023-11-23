@@ -32,6 +32,7 @@ partial class LoggingView
         var resources = new System.ComponentModel.ComponentResourceManager(typeof(LoggingView));
         SplitContainer pnlLogging;
         tbtnLoggingRefresh = new ToolStripButton();
+        tbtnLoggingReset = new ToolStripButton();
         toolStripSeparator1 = new ToolStripSeparator();
         tbtnLoggingError = new ToolStripButton();
         tbtnLoggingWarning = new ToolStripButton();
@@ -57,7 +58,6 @@ partial class LoggingView
         txtLoggingMessage = new TextBox();
         tabLoggingException = new TabPage();
         txtLoggingException = new TextBox();
-        tbtnLoggingReset = new ToolStripButton();
         toolStripLogging = new ToolStrip();
         pnlLogging = new SplitContainer();
         toolStripLogging.SuspendLayout();
@@ -79,7 +79,9 @@ partial class LoggingView
         toolStripLogging.Items.AddRange(new ToolStripItem[] { tbtnLoggingRefresh, tbtnLoggingReset, toolStripSeparator1, tbtnLoggingError, tbtnLoggingWarning, tbtnLoggingInfo, tbtnLoggingDebug, toolStripSeparator2, tlblLoggingSource, ttxtLoggingSource, toolStripSeparator3, tlblLoggingMessage, ttxtLoggingMessage });
         toolStripLogging.Location = new Point(0, 0);
         toolStripLogging.Name = "toolStripLogging";
-        toolStripLogging.Size = new Size(700, 25);
+        toolStripLogging.RenderMode = ToolStripRenderMode.System;
+        toolStripLogging.Size = new Size(901, 33);
+        toolStripLogging.Stretch = true;
         toolStripLogging.TabIndex = 0;
         // 
         // tbtnLoggingRefresh
@@ -87,17 +89,28 @@ partial class LoggingView
         tbtnLoggingRefresh.Image = (Image)resources.GetObject("tbtnLoggingRefresh.Image");
         tbtnLoggingRefresh.ImageTransparentColor = Color.Magenta;
         tbtnLoggingRefresh.Name = "tbtnLoggingRefresh";
-        tbtnLoggingRefresh.Size = new Size(66, 22);
+        tbtnLoggingRefresh.Size = new Size(66, 30);
         tbtnLoggingRefresh.Text = "Refresh";
         tbtnLoggingRefresh.Click += tbtnLoggingRefresh_Click;
+        // 
+        // tbtnLoggingReset
+        // 
+        tbtnLoggingReset.Image = (Image)resources.GetObject("tbtnLoggingReset.Image");
+        tbtnLoggingReset.ImageTransparentColor = Color.Magenta;
+        tbtnLoggingReset.Name = "tbtnLoggingReset";
+        tbtnLoggingReset.Size = new Size(55, 30);
+        tbtnLoggingReset.Text = "Reset";
+        tbtnLoggingReset.ToolTipText = "Reset";
+        tbtnLoggingReset.Click += tbtnLoggingReset_Click;
         // 
         // toolStripSeparator1
         // 
         toolStripSeparator1.Name = "toolStripSeparator1";
-        toolStripSeparator1.Size = new Size(6, 25);
+        toolStripSeparator1.Size = new Size(6, 33);
         // 
         // tbtnLoggingError
         // 
+        tbtnLoggingError.AutoSize = false;
         tbtnLoggingError.Checked = true;
         tbtnLoggingError.CheckOnClick = true;
         tbtnLoggingError.CheckState = CheckState.Checked;
@@ -105,12 +118,13 @@ partial class LoggingView
         tbtnLoggingError.Image = (Image)resources.GetObject("tbtnLoggingError.Image");
         tbtnLoggingError.ImageTransparentColor = Color.Magenta;
         tbtnLoggingError.Name = "tbtnLoggingError";
-        tbtnLoggingError.Size = new Size(23, 22);
+        tbtnLoggingError.Size = new Size(30, 30);
         tbtnLoggingError.Text = "Error";
         tbtnLoggingError.Click += tbtnLoggingLevel_Click;
         // 
         // tbtnLoggingWarning
         // 
+        tbtnLoggingWarning.AutoSize = false;
         tbtnLoggingWarning.Checked = true;
         tbtnLoggingWarning.CheckOnClick = true;
         tbtnLoggingWarning.CheckState = CheckState.Checked;
@@ -118,12 +132,13 @@ partial class LoggingView
         tbtnLoggingWarning.Image = (Image)resources.GetObject("tbtnLoggingWarning.Image");
         tbtnLoggingWarning.ImageTransparentColor = Color.Magenta;
         tbtnLoggingWarning.Name = "tbtnLoggingWarning";
-        tbtnLoggingWarning.Size = new Size(23, 22);
+        tbtnLoggingWarning.Size = new Size(30, 30);
         tbtnLoggingWarning.Text = "Warning";
         tbtnLoggingWarning.Click += tbtnLoggingLevel_Click;
         // 
         // tbtnLoggingInfo
         // 
+        tbtnLoggingInfo.AutoSize = false;
         tbtnLoggingInfo.Checked = true;
         tbtnLoggingInfo.CheckOnClick = true;
         tbtnLoggingInfo.CheckState = CheckState.Checked;
@@ -131,30 +146,31 @@ partial class LoggingView
         tbtnLoggingInfo.Image = (Image)resources.GetObject("tbtnLoggingInfo.Image");
         tbtnLoggingInfo.ImageTransparentColor = Color.Magenta;
         tbtnLoggingInfo.Name = "tbtnLoggingInfo";
-        tbtnLoggingInfo.Size = new Size(23, 22);
+        tbtnLoggingInfo.Size = new Size(30, 30);
         tbtnLoggingInfo.Text = "Information";
         tbtnLoggingInfo.Click += tbtnLoggingLevel_Click;
         // 
         // tbtnLoggingDebug
         // 
+        tbtnLoggingDebug.AutoSize = false;
         tbtnLoggingDebug.CheckOnClick = true;
         tbtnLoggingDebug.DisplayStyle = ToolStripItemDisplayStyle.Image;
         tbtnLoggingDebug.Image = (Image)resources.GetObject("tbtnLoggingDebug.Image");
         tbtnLoggingDebug.ImageTransparentColor = Color.Magenta;
         tbtnLoggingDebug.Name = "tbtnLoggingDebug";
-        tbtnLoggingDebug.Size = new Size(23, 22);
+        tbtnLoggingDebug.Size = new Size(30, 30);
         tbtnLoggingDebug.Text = "Diagnostic";
         tbtnLoggingDebug.Click += tbtnLoggingLevel_Click;
         // 
         // toolStripSeparator2
         // 
         toolStripSeparator2.Name = "toolStripSeparator2";
-        toolStripSeparator2.Size = new Size(6, 25);
+        toolStripSeparator2.Size = new Size(6, 33);
         // 
         // tlblLoggingSource
         // 
         tlblLoggingSource.Name = "tlblLoggingSource";
-        tlblLoggingSource.Size = new Size(46, 22);
+        tlblLoggingSource.Size = new Size(46, 30);
         tlblLoggingSource.Text = "Source:";
         // 
         // ttxtLoggingSource
@@ -162,29 +178,29 @@ partial class LoggingView
         ttxtLoggingSource.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
         ttxtLoggingSource.AutoCompleteSource = AutoCompleteSource.CustomSource;
         ttxtLoggingSource.Name = "ttxtLoggingSource";
-        ttxtLoggingSource.Size = new Size(200, 25);
+        ttxtLoggingSource.Size = new Size(200, 33);
         // 
         // toolStripSeparator3
         // 
         toolStripSeparator3.Name = "toolStripSeparator3";
-        toolStripSeparator3.Size = new Size(6, 25);
+        toolStripSeparator3.Size = new Size(6, 33);
         // 
         // tlblLoggingMessage
         // 
         tlblLoggingMessage.Name = "tlblLoggingMessage";
-        tlblLoggingMessage.Size = new Size(56, 22);
+        tlblLoggingMessage.Size = new Size(56, 30);
         tlblLoggingMessage.Text = "Message:";
         // 
         // ttxtLoggingMessage
         // 
         ttxtLoggingMessage.Name = "ttxtLoggingMessage";
-        ttxtLoggingMessage.Size = new Size(200, 23);
+        ttxtLoggingMessage.Size = new Size(200, 33);
         // 
         // pnlLogging
         // 
         pnlLogging.Dock = DockStyle.Fill;
         pnlLogging.FixedPanel = FixedPanel.Panel2;
-        pnlLogging.Location = new Point(0, 25);
+        pnlLogging.Location = new Point(0, 33);
         pnlLogging.Name = "pnlLogging";
         pnlLogging.Orientation = Orientation.Horizontal;
         // 
@@ -195,9 +211,9 @@ partial class LoggingView
         // pnlLogging.Panel2
         // 
         pnlLogging.Panel2.Controls.Add(tabsLogging);
-        pnlLogging.Size = new Size(700, 475);
-        pnlLogging.SplitterDistance = 276;
-        pnlLogging.SplitterWidth = 8;
+        pnlLogging.Size = new Size(901, 538);
+        pnlLogging.SplitterDistance = 327;
+        pnlLogging.SplitterWidth = 12;
         pnlLogging.TabIndex = 1;
         // 
         // gridLogs
@@ -212,7 +228,7 @@ partial class LoggingView
         gridLogs.ReadOnly = true;
         gridLogs.RowTemplate.Height = 25;
         gridLogs.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        gridLogs.Size = new Size(700, 276);
+        gridLogs.Size = new Size(901, 327);
         gridLogs.TabIndex = 0;
         gridLogs.RowEnter += gridLogs_RowEnter;
         // 
@@ -249,7 +265,7 @@ partial class LoggingView
         // 
         // tabsLogging
         // 
-        tabsLogging.Alignment = TabAlignment.Left;
+        tabsLogging.Alignment = TabAlignment.Bottom;
         tabsLogging.Controls.Add(tabLoggingProperties);
         tabsLogging.Controls.Add(tabLoggingMessage);
         tabsLogging.Controls.Add(tabLoggingException);
@@ -258,16 +274,16 @@ partial class LoggingView
         tabsLogging.Multiline = true;
         tabsLogging.Name = "tabsLogging";
         tabsLogging.SelectedIndex = 0;
-        tabsLogging.Size = new Size(700, 191);
+        tabsLogging.Size = new Size(901, 199);
         tabsLogging.TabIndex = 1;
         // 
         // tabLoggingProperties
         // 
         tabLoggingProperties.Controls.Add(gridProperties);
-        tabLoggingProperties.Location = new Point(50, 4);
+        tabLoggingProperties.Location = new Point(4, 4);
         tabLoggingProperties.Name = "tabLoggingProperties";
         tabLoggingProperties.Padding = new Padding(3);
-        tabLoggingProperties.Size = new Size(646, 183);
+        tabLoggingProperties.Size = new Size(893, 171);
         tabLoggingProperties.TabIndex = 0;
         tabLoggingProperties.Text = "Properties";
         tabLoggingProperties.UseVisualStyleBackColor = true;
@@ -285,7 +301,7 @@ partial class LoggingView
         gridProperties.ReadOnly = true;
         gridProperties.RowTemplate.Height = 25;
         gridProperties.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        gridProperties.Size = new Size(640, 177);
+        gridProperties.Size = new Size(887, 165);
         gridProperties.TabIndex = 0;
         // 
         // gridPropertiesName
@@ -306,10 +322,10 @@ partial class LoggingView
         // tabLoggingMessage
         // 
         tabLoggingMessage.Controls.Add(txtLoggingMessage);
-        tabLoggingMessage.Location = new Point(50, 4);
+        tabLoggingMessage.Location = new Point(4, 4);
         tabLoggingMessage.Name = "tabLoggingMessage";
         tabLoggingMessage.Padding = new Padding(3);
-        tabLoggingMessage.Size = new Size(646, 179);
+        tabLoggingMessage.Size = new Size(893, 171);
         tabLoggingMessage.TabIndex = 1;
         tabLoggingMessage.Text = "Message";
         tabLoggingMessage.UseVisualStyleBackColor = true;
@@ -323,17 +339,17 @@ partial class LoggingView
         txtLoggingMessage.Name = "txtLoggingMessage";
         txtLoggingMessage.ReadOnly = true;
         txtLoggingMessage.ScrollBars = ScrollBars.Both;
-        txtLoggingMessage.Size = new Size(640, 173);
+        txtLoggingMessage.Size = new Size(887, 165);
         txtLoggingMessage.TabIndex = 0;
         txtLoggingMessage.WordWrap = false;
         // 
         // tabLoggingException
         // 
         tabLoggingException.Controls.Add(txtLoggingException);
-        tabLoggingException.Location = new Point(50, 4);
+        tabLoggingException.Location = new Point(4, 4);
         tabLoggingException.Name = "tabLoggingException";
         tabLoggingException.Padding = new Padding(3);
-        tabLoggingException.Size = new Size(646, 179);
+        tabLoggingException.Size = new Size(893, 171);
         tabLoggingException.TabIndex = 2;
         tabLoggingException.Text = "Exception";
         tabLoggingException.UseVisualStyleBackColor = true;
@@ -347,19 +363,9 @@ partial class LoggingView
         txtLoggingException.Name = "txtLoggingException";
         txtLoggingException.ReadOnly = true;
         txtLoggingException.ScrollBars = ScrollBars.Both;
-        txtLoggingException.Size = new Size(640, 173);
+        txtLoggingException.Size = new Size(887, 165);
         txtLoggingException.TabIndex = 0;
         txtLoggingException.WordWrap = false;
-        // 
-        // tbtnLoggingReset
-        // 
-        tbtnLoggingReset.Image = (Image)resources.GetObject("tbtnLoggingReset.Image");
-        tbtnLoggingReset.ImageTransparentColor = Color.Magenta;
-        tbtnLoggingReset.Name = "tbtnLoggingReset";
-        tbtnLoggingReset.Size = new Size(55, 22);
-        tbtnLoggingReset.Text = "Reset";
-        tbtnLoggingReset.ToolTipText = "Reset";
-        tbtnLoggingReset.Click += tbtnLoggingReset_Click;
         // 
         // LoggingView
         // 
@@ -368,7 +374,7 @@ partial class LoggingView
         Controls.Add(pnlLogging);
         Controls.Add(toolStripLogging);
         Name = "LoggingView";
-        Size = new Size(700, 500);
+        Size = new Size(901, 571);
         Load += LoggingView_Load;
         toolStripLogging.ResumeLayout(false);
         toolStripLogging.PerformLayout();

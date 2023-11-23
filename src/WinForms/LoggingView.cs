@@ -85,6 +85,8 @@ public partial class LoggingView : UserControl
         gridLogs.Rows.Clear();
 
         DirectoryInfo directory = new(Details.LogDirectory);
+        if (!directory.Exists)
+            return;
         FileInfo? logFile = directory.GetFiles("*.txt", SearchOption.TopDirectoryOnly)
             .MaxBy(file => file.CreationTime);
         if (logFile is null)
@@ -125,13 +127,12 @@ public partial class LoggingView : UserControl
                 if (!sources.Exists(s => entry.Source is not null && s.Equals(entry.Source, StringComparison.OrdinalIgnoreCase)))
                     sources.Add(entry.Source!);
 
-                DataGridViewRow row = new();
+                DataGridViewRow row = new() { Tag = entry };
                 row.Cells.AddRange(
                     new DataGridViewTextBoxCell { Value = entry.Timestamp.ToLocalTime().ToString("s") },
                     new DataGridViewTextBoxCell { Value = entry.ActualLevel },
                     new DataGridViewTextBoxCell { Value = entry.Source },
                     new DataGridViewTextBoxCell { Value = entry.Message });
-                row.Tag = entry;
                 gridLogs.Rows.Add(row);
             }
 

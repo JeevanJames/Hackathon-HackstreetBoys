@@ -45,10 +45,10 @@ partial class MainForm
         miViewConfig = new ToolStripMenuItem();
         miViewLogging = new ToolStripMenuItem();
         miViewEvents = new ToolStripMenuItem();
+        miViewCrashLogs = new ToolStripMenuItem();
         miViewBrowser = new ToolStripMenuItem();
         miViewIisInfo = new ToolStripMenuItem();
         miViewInternetExplorerBrowser = new ToolStripMenuItem();
-        miViewChromiumBrowser = new ToolStripMenuItem();
         toolbarMain = new ToolStrip();
         tbtnMainLoadSite = new ToolStripButton();
         toolStripSeparator2 = new ToolStripSeparator();
@@ -58,15 +58,17 @@ partial class MainForm
         tsNavConfig = new ToolStripButton();
         tsNavLogging = new ToolStripButton();
         tsNavEventViewer = new ToolStripButton();
+        tsNavCrashLogs = new ToolStripButton();
         tsNavBrowse = new ToolStripButton();
         tsNavInfo = new ToolStripButton();
+        tsNavInternetExplorerBrowser = new ToolStripButton();
         pnlView = new Panel();
         statusBar = new StatusStrip();
         lblStatusSiteName = new ToolStripStatusLabel();
         lblStatusAppPool = new ToolStripStatusLabel();
         lblStatusDirectory = new ToolStripStatusLabel();
-        lblStatusUrl = new ToolStripStatusLabel();
         lblStatusLogDirectory = new ToolStripStatusLabel();
+        lblStatusUrl = new ToolStripStatusLabel();
         lblViewHeader = new Label();
         menuMain = new MenuStrip();
         menuMainFile = new ToolStripMenuItem();
@@ -158,7 +160,7 @@ partial class MainForm
         miSiteExploreLogs.Name = "miSiteExploreLogs";
         miSiteExploreLogs.ShortcutKeys = Keys.Control | Keys.Shift | Keys.L;
         miSiteExploreLogs.Size = new Size(306, 22);
-        miSiteExploreLogs.Text = "Explorer Log Directory";
+        miSiteExploreLogs.Text = "Explore Log Directory";
         miSiteExploreLogs.Click += miSiteExploreLogs_Click;
         // 
         // miSiteBrowse
@@ -171,7 +173,7 @@ partial class MainForm
         // 
         // menuMainView
         // 
-        menuMainView.DropDownItems.AddRange(new ToolStripItem[] { miViewConfig, miViewLogging, miViewEvents, miViewBrowser, miViewIisInfo, miViewInternetExplorerBrowser, miViewChromiumBrowser });
+        menuMainView.DropDownItems.AddRange(new ToolStripItem[] { miViewConfig, miViewLogging, miViewEvents, miViewCrashLogs, miViewBrowser, miViewIisInfo, miViewInternetExplorerBrowser });
         menuMainView.Name = "menuMainView";
         menuMainView.Size = new Size(44, 20);
         menuMainView.Text = "&View";
@@ -181,7 +183,7 @@ partial class MainForm
         miViewConfig.Name = "miViewConfig";
         miViewConfig.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D1;
         miViewConfig.Size = new Size(278, 22);
-        miViewConfig.Tag = "1";
+        miViewConfig.Tag = "CONFIG";
         miViewConfig.Text = "&Configuration";
         // 
         // miViewLogging
@@ -189,7 +191,7 @@ partial class MainForm
         miViewLogging.Name = "miViewLogging";
         miViewLogging.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D2;
         miViewLogging.Size = new Size(278, 22);
-        miViewLogging.Tag = "2";
+        miViewLogging.Tag = "LOGGER";
         miViewLogging.Text = "&Logging";
         // 
         // miViewEvents
@@ -197,40 +199,40 @@ partial class MainForm
         miViewEvents.Name = "miViewEvents";
         miViewEvents.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D3;
         miViewEvents.Size = new Size(278, 22);
-        miViewEvents.Tag = "3";
+        miViewEvents.Tag = "LOGEVT";
         miViewEvents.Text = "&Event Viewer Logs";
+        // 
+        // miViewCrashLogs
+        // 
+        miViewCrashLogs.Name = "miViewCrashLogs";
+        miViewCrashLogs.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D4;
+        miViewCrashLogs.Size = new Size(278, 22);
+        miViewCrashLogs.Tag = "LOGCRS";
+        miViewCrashLogs.Text = "Crash Logs";
         // 
         // miViewBrowser
         // 
         miViewBrowser.Name = "miViewBrowser";
-        miViewBrowser.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D4;
+        miViewBrowser.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D5;
         miViewBrowser.Size = new Size(278, 22);
-        miViewBrowser.Tag = "4";
+        miViewBrowser.Tag = "BROWSE";
         miViewBrowser.Text = "&Browser";
         // 
         // miViewIisInfo
         // 
         miViewIisInfo.Name = "miViewIisInfo";
-        miViewIisInfo.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D5;
+        miViewIisInfo.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D6;
         miViewIisInfo.Size = new Size(278, 22);
-        miViewIisInfo.Tag = "5";
+        miViewIisInfo.Tag = "IISINF";
         miViewIisInfo.Text = "IIS Information";
         // 
         // miViewInternetExplorerBrowser
         // 
         miViewInternetExplorerBrowser.Name = "miViewInternetExplorerBrowser";
-        miViewInternetExplorerBrowser.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D6;
+        miViewInternetExplorerBrowser.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D7;
         miViewInternetExplorerBrowser.Size = new Size(278, 22);
-        miViewInternetExplorerBrowser.Tag = "6";
+        miViewInternetExplorerBrowser.Tag = "IEXPLR";
         miViewInternetExplorerBrowser.Text = "Internet Explorer Browser";
-        // 
-        // miViewChromiumBrowser
-        // 
-        miViewChromiumBrowser.Name = "miViewChromiumBrowser";
-        miViewChromiumBrowser.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D7;
-        miViewChromiumBrowser.Size = new Size(278, 22);
-        miViewChromiumBrowser.Tag = "7";
-        miViewChromiumBrowser.Text = "Chromium Browser";
         // 
         // toolbarMain
         // 
@@ -259,23 +261,19 @@ partial class MainForm
         // 
         // tbtnMainRestartSite
         // 
-        tbtnMainRestartSite.AutoSize = false;
-        tbtnMainRestartSite.DisplayStyle = ToolStripItemDisplayStyle.Image;
         tbtnMainRestartSite.Image = (Image)resources.GetObject("tbtnMainRestartSite.Image");
         tbtnMainRestartSite.ImageTransparentColor = Color.Magenta;
         tbtnMainRestartSite.Name = "tbtnMainRestartSite";
-        tbtnMainRestartSite.Size = new Size(30, 30);
+        tbtnMainRestartSite.Size = new Size(85, 30);
         tbtnMainRestartSite.Text = "Restart Site";
         tbtnMainRestartSite.Click += miSiteRestart_Click;
         // 
         // tbtnMainRecycleAppPool
         // 
-        tbtnMainRecycleAppPool.AutoSize = false;
-        tbtnMainRecycleAppPool.DisplayStyle = ToolStripItemDisplayStyle.Image;
         tbtnMainRecycleAppPool.Image = (Image)resources.GetObject("tbtnMainRecycleAppPool.Image");
         tbtnMainRecycleAppPool.ImageTransparentColor = Color.Magenta;
         tbtnMainRecycleAppPool.Name = "tbtnMainRecycleAppPool";
-        tbtnMainRecycleAppPool.Size = new Size(30, 30);
+        tbtnMainRecycleAppPool.Size = new Size(158, 30);
         tbtnMainRecycleAppPool.Text = "Recycle Application Pool";
         tbtnMainRecycleAppPool.Click += miSiteRecycleAppPool_Click;
         // 
@@ -284,7 +282,7 @@ partial class MainForm
         toolbarNavigation.BackColor = SystemColors.ControlDark;
         toolbarNavigation.Dock = DockStyle.Left;
         toolbarNavigation.GripStyle = ToolStripGripStyle.Hidden;
-        toolbarNavigation.Items.AddRange(new ToolStripItem[] { tsNavConfig, tsNavLogging, tsNavEventViewer, tsNavBrowse, tsNavInfo });
+        toolbarNavigation.Items.AddRange(new ToolStripItem[] { tsNavConfig, tsNavLogging, tsNavEventViewer, tsNavCrashLogs, tsNavBrowse, tsNavInfo, tsNavInternetExplorerBrowser });
         toolbarNavigation.Location = new Point(0, 57);
         toolbarNavigation.Name = "toolbarNavigation";
         toolbarNavigation.Size = new Size(41, 530);
@@ -299,7 +297,7 @@ partial class MainForm
         tsNavConfig.ImageTransparentColor = Color.Magenta;
         tsNavConfig.Name = "tsNavConfig";
         tsNavConfig.Size = new Size(40, 40);
-        tsNavConfig.Tag = "1";
+        tsNavConfig.Tag = "CONFIG";
         tsNavConfig.Text = "Configuration";
         // 
         // tsNavLogging
@@ -310,7 +308,7 @@ partial class MainForm
         tsNavLogging.ImageTransparentColor = Color.Magenta;
         tsNavLogging.Name = "tsNavLogging";
         tsNavLogging.Size = new Size(40, 40);
-        tsNavLogging.Tag = "2";
+        tsNavLogging.Tag = "LOGGER";
         tsNavLogging.Text = "Logging";
         // 
         // tsNavEventViewer
@@ -321,9 +319,20 @@ partial class MainForm
         tsNavEventViewer.ImageTransparentColor = Color.Magenta;
         tsNavEventViewer.Name = "tsNavEventViewer";
         tsNavEventViewer.Size = new Size(40, 40);
-        tsNavEventViewer.Tag = "3";
+        tsNavEventViewer.Tag = "LOGEVT";
         tsNavEventViewer.Text = "Event Viewer";
         tsNavEventViewer.ToolTipText = "Event Viewer";
+        // 
+        // tsNavCrashLogs
+        // 
+        tsNavCrashLogs.AutoSize = false;
+        tsNavCrashLogs.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        tsNavCrashLogs.Image = (Image)resources.GetObject("tsNavCrashLogs.Image");
+        tsNavCrashLogs.ImageTransparentColor = Color.Magenta;
+        tsNavCrashLogs.Name = "tsNavCrashLogs";
+        tsNavCrashLogs.Size = new Size(40, 40);
+        tsNavCrashLogs.Tag = "LOGCRS";
+        tsNavCrashLogs.Text = "Crash Logs";
         // 
         // tsNavBrowse
         // 
@@ -333,7 +342,7 @@ partial class MainForm
         tsNavBrowse.ImageTransparentColor = Color.Magenta;
         tsNavBrowse.Name = "tsNavBrowse";
         tsNavBrowse.Size = new Size(40, 40);
-        tsNavBrowse.Tag = "4";
+        tsNavBrowse.Tag = "BROWSE";
         tsNavBrowse.Text = "Browse";
         // 
         // tsNavInfo
@@ -345,8 +354,19 @@ partial class MainForm
         tsNavInfo.ImageTransparentColor = Color.Magenta;
         tsNavInfo.Name = "tsNavInfo";
         tsNavInfo.Size = new Size(40, 40);
-        tsNavInfo.Tag = "5";
+        tsNavInfo.Tag = "IISINF";
         tsNavInfo.Text = "IIS Information";
+        // 
+        // tsNavInternetExplorerBrowser
+        // 
+        tsNavInternetExplorerBrowser.AutoSize = false;
+        tsNavInternetExplorerBrowser.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        tsNavInternetExplorerBrowser.Image = (Image)resources.GetObject("tsNavInternetExplorerBrowser.Image");
+        tsNavInternetExplorerBrowser.ImageTransparentColor = Color.Magenta;
+        tsNavInternetExplorerBrowser.Name = "tsNavInternetExplorerBrowser";
+        tsNavInternetExplorerBrowser.Size = new Size(40, 40);
+        tsNavInternetExplorerBrowser.Tag = "IEXPLR";
+        tsNavInternetExplorerBrowser.Text = "Internet Explorer Browser";
         // 
         // pnlView
         // 
@@ -359,7 +379,7 @@ partial class MainForm
         // 
         // statusBar
         // 
-        statusBar.Items.AddRange(new ToolStripItem[] { lblStatusSiteName, lblStatusAppPool, lblStatusDirectory, lblStatusUrl, lblStatusLogDirectory });
+        statusBar.Items.AddRange(new ToolStripItem[] { lblStatusSiteName, lblStatusAppPool, lblStatusDirectory, lblStatusLogDirectory, lblStatusUrl });
         statusBar.Location = new Point(0, 587);
         statusBar.Name = "statusBar";
         statusBar.ShowItemToolTips = true;
@@ -372,7 +392,8 @@ partial class MainForm
         lblStatusSiteName.BorderSides = ToolStripStatusLabelBorderSides.Right;
         lblStatusSiteName.BorderStyle = Border3DStyle.Etched;
         lblStatusSiteName.Name = "lblStatusSiteName";
-        lblStatusSiteName.Size = new Size(63, 20);
+        lblStatusSiteName.Padding = new Padding(0, 0, 5, 0);
+        lblStatusSiteName.Size = new Size(68, 20);
         lblStatusSiteName.Text = "Site name";
         lblStatusSiteName.ToolTipText = "Site name. Click to copy to clipboard.";
         // 
@@ -382,7 +403,8 @@ partial class MainForm
         lblStatusAppPool.BorderStyle = Border3DStyle.Etched;
         lblStatusAppPool.Image = (Image)resources.GetObject("lblStatusAppPool.Image");
         lblStatusAppPool.Name = "lblStatusAppPool";
-        lblStatusAppPool.Size = new Size(115, 20);
+        lblStatusAppPool.Padding = new Padding(5, 0, 5, 0);
+        lblStatusAppPool.Size = new Size(125, 20);
         lblStatusAppPool.Text = "Application Pool";
         lblStatusAppPool.ToolTipText = "Application pool";
         // 
@@ -391,35 +413,37 @@ partial class MainForm
         lblStatusDirectory.BorderSides = ToolStripStatusLabelBorderSides.Right;
         lblStatusDirectory.BorderStyle = Border3DStyle.Etched;
         lblStatusDirectory.Image = (Image)resources.GetObject("lblStatusDirectory.Image");
+        lblStatusDirectory.IsLink = true;
         lblStatusDirectory.Name = "lblStatusDirectory";
-        lblStatusDirectory.Size = new Size(75, 20);
-        lblStatusDirectory.Text = "Directory";
+        lblStatusDirectory.Padding = new Padding(5, 0, 5, 0);
+        lblStatusDirectory.Size = new Size(126, 20);
+        lblStatusDirectory.Text = "Explore directory";
         lblStatusDirectory.TextAlign = ContentAlignment.MiddleLeft;
-        lblStatusDirectory.ToolTipText = "Site directory. Click to explore.";
         lblStatusDirectory.Click += miSiteExplore_Click;
+        // 
+        // lblStatusLogDirectory
+        // 
+        lblStatusLogDirectory.AutoToolTip = true;
+        lblStatusLogDirectory.BorderSides = ToolStripStatusLabelBorderSides.Right;
+        lblStatusLogDirectory.BorderStyle = Border3DStyle.Etched;
+        lblStatusLogDirectory.Image = (Image)resources.GetObject("lblStatusLogDirectory.Image");
+        lblStatusLogDirectory.Name = "lblStatusLogDirectory";
+        lblStatusLogDirectory.Padding = new Padding(5, 0, 5, 0);
+        lblStatusLogDirectory.Size = new Size(108, 20);
+        lblStatusLogDirectory.Text = "Log Directory";
+        lblStatusLogDirectory.Click += miSiteExploreLogs_Click;
         // 
         // lblStatusUrl
         // 
-        lblStatusUrl.BorderSides = ToolStripStatusLabelBorderSides.Right;
         lblStatusUrl.BorderStyle = Border3DStyle.Etched;
         lblStatusUrl.Image = (Image)resources.GetObject("lblStatusUrl.Image");
         lblStatusUrl.IsLink = true;
         lblStatusUrl.LinkBehavior = LinkBehavior.AlwaysUnderline;
         lblStatusUrl.Name = "lblStatusUrl";
-        lblStatusUrl.Size = new Size(48, 20);
-        lblStatusUrl.Text = "URL";
-        lblStatusUrl.ToolTipText = "Site URL. Click to open in the default browser.";
+        lblStatusUrl.Padding = new Padding(5, 0, 0, 0);
+        lblStatusUrl.Size = new Size(164, 20);
+        lblStatusUrl.Text = "Browse in default browser";
         lblStatusUrl.Click += miSiteBrowse_Click;
-        // 
-        // lblStatusLogDirectory
-        // 
-        lblStatusLogDirectory.AutoToolTip = true;
-        lblStatusLogDirectory.Image = (Image)resources.GetObject("lblStatusLogDirectory.Image");
-        lblStatusLogDirectory.Name = "lblStatusLogDirectory";
-        lblStatusLogDirectory.Size = new Size(97, 20);
-        lblStatusLogDirectory.Text = "Log Directory.";
-        lblStatusLogDirectory.ToolTipText = "Log directory. Click to explore.";
-        lblStatusLogDirectory.Click += miSiteExploreLogs_Click;
         // 
         // lblViewHeader
         // 
@@ -497,5 +521,7 @@ partial class MainForm
     private ToolStripButton tsNavInfo;
     private Label lblViewHeader;
     private ToolStripMenuItem miViewInternetExplorerBrowser;
-    private ToolStripMenuItem miViewChromiumBrowser;
+    private ToolStripButton tsNavInternetExplorerBrowser;
+    private ToolStripMenuItem miViewCrashLogs;
+    private ToolStripButton tsNavCrashLogs;
 }

@@ -78,6 +78,8 @@ public partial class IisInfoView : UserControl
         foreach ((string name, object? value) in infos)
         {
             ListViewItem item = new(name) { Group = group };
+            if (name is "Load User Profile" or "Idle Timeout" or "Connection Timeout")
+                item.BackColor = Color.IndianRed;
             string strValue = value switch
             {
                 null => "[NULL]",

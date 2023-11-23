@@ -1,8 +1,7 @@
-using System;
 using System.Diagnostics;
-using System.Reflection;
 
 using Hackathon.HackstreetBoys.WinForms.ChromiumBrowser;
+using Hackathon.HackstreetBoys.WinForms.CrashLogs;
 using Hackathon.HackstreetBoys.WinForms.EventViewer;
 using Hackathon.HackstreetBoys.WinForms.IisInfo;
 using Hackathon.HackstreetBoys.WinForms.InternetExplorerBrowser;
@@ -98,9 +97,20 @@ public partial class MainForm : Form
 
         lblStatusSiteName.Text = _details.Site;
         lblStatusAppPool.Text = _details.AppPool;
-        lblStatusDirectory.Text = _details.Directory;
-        lblStatusUrl.Text = _details.Url;
-        lblStatusLogDirectory.Text = _details.LogDirectory;
+        lblStatusDirectory.ToolTipText = _details.Directory;
+        lblStatusUrl.ToolTipText = _details.Url;
+        if (Directory.Exists(_details.LogDirectory))
+        {
+            lblStatusLogDirectory.Text = "Explore logs directory";
+            lblStatusLogDirectory.IsLink = true;
+            lblStatusLogDirectory.ToolTipText = _details.LogDirectory;
+        }
+        else
+        {
+            lblStatusLogDirectory.Text = "Logs directory not found!";
+            lblStatusLogDirectory.IsLink = false;
+            lblStatusLogDirectory.ToolTipText = _details.LogDirectory;
+        }
 
         ActivateFirstNavView();
 
@@ -121,13 +131,13 @@ public partial class MainForm : Form
 
         _currentView = index switch
         {
-            "1" => new ConfigView { Details = _details },
-            "2" => new LoggingView { Details = _details },
-            "3" => new EventViewerView(),
-            "4" => new BrowserView { Details = _details },
-            "5" => new IisInfoView { Details = _details },
-            "6" => new InternetExplorerBrowserView { Details = _details },
-            "7" => new ChromiumBrowserView { Details = _details },
+            "CONFIG" => new ConfigView { Details = _details },
+            "LOGGER" => new LoggingView { Details = _details },
+            "LOGEVT" => new EventViewerView { Details = _details },
+            "LOGCRS" => new CrashLogsView { Details = _details },
+            "BROWSE" => new ChromiumBrowserView { Details = _details },
+            "IISINF" => new IisInfoView { Details = _details },
+            "IEXPLR" => new InternetExplorerBrowserView { Details = _details },
             _ => throw new InvalidOperationException($"Unrecognized navigation button {index}."),
         };
 
