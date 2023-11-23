@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -18,7 +18,7 @@
         <PackageReference Include="Aargh" Version="0.1.10" />
         <PackageReference Include="Aargh.Extensions.SpectreConsole" Version="0.1.10" />
         <PackageReference Include="Microsoft.Web.Administration" Version="11.1.0" />
-        <PackageReference Include="Spectre.Console" Version="0.47.0" />
+        <PackageReference Include="Spectre.Console" Version="0.48.0" />
     </ItemGroup>
 
 </Project>
