@@ -25,6 +25,7 @@ public partial class EventViewerView : UserControl
     {
         grdLogs.Rows.Clear();
 
+        // Get data
         using EventLog log = new("Application");
 
         IEnumerable<EventLogEntry> logs = log.Entries.Cast<EventLogEntry>();
@@ -38,6 +39,7 @@ public partial class EventViewerView : UserControl
 
         logs = logs.Take(100).OrderByDescending(e => e.TimeWritten);
 
+        // Set up cell styles
         DataGridViewCellStyle errorStyle = new() { BackColor = Color.Red };
         DataGridViewCellStyle warningStyle = new() { BackColor = Color.Yellow };
         DataGridViewCellStyle infoStyle = new() { BackColor = Color.Green, ForeColor = Color.White };
