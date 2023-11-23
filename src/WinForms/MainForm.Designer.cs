@@ -96,20 +96,21 @@ partial class MainForm
         // miFileLoadSite
         // 
         miFileLoadSite.Name = "miFileLoadSite";
-        miFileLoadSite.Size = new Size(131, 22);
+        miFileLoadSite.ShortcutKeys = Keys.F2;
+        miFileLoadSite.Size = new Size(180, 22);
         miFileLoadSite.Text = "Load &Site...";
         miFileLoadSite.Click += miFileLoadSite_Click;
         // 
         // miSeparatorFile1
         // 
         miSeparatorFile1.Name = "miSeparatorFile1";
-        miSeparatorFile1.Size = new Size(128, 6);
+        miSeparatorFile1.Size = new Size(177, 6);
         // 
         // miFileExit
         // 
         miFileExit.Image = (Image)resources.GetObject("miFileExit.Image");
         miFileExit.Name = "miFileExit";
-        miFileExit.Size = new Size(131, 22);
+        miFileExit.Size = new Size(180, 22);
         miFileExit.Text = "E&xit";
         miFileExit.Click += miFileExit_Click;
         // 

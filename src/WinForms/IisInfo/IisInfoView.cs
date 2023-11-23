@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.Web.Administration;
 
-using Microsoft.Web.Administration;
+using Application = Microsoft.Web.Administration.Application;
 
 namespace Hackathon.HackstreetBoys.WinForms.IisInfo;
 
@@ -11,58 +11,81 @@ public partial class IisInfoView : UserControl
         InitializeComponent();
     }
 
+    public required SiteDetails Details { get; init; }
+
     private void IisInfoView_Load(object sender, EventArgs e)
     {
         using ServerManager manager = new();
 
-        grdInfo.SelectedObject = new IisInfo
+        Site site = manager.Sites[Details.Site];
+        Application application = site.Applications["/"];
+        string appPoolName = application.ApplicationPoolName;
+        ApplicationPool appPool = manager.ApplicationPools[appPoolName];
+
+        ListViewGroup grpSite = lstInfo.Groups.Add("grpSite", "Web Site");
+        AddInfos(grpSite, new()
         {
-            Name = "MyWebSite",
-            Description = "My web site's application pool",
-            Schemes = new[]
-            {
-                new IisInfoBindings
-                {
-                    Scheme = "https",
-                    Dns = "myapp.com",
-                    Port = 443,
-                },
-                new IisInfoBindings
-                {
-                    Scheme = "http",
-                    Dns = "myapp.com",
-                    Port = 8080,
-                }
-            },
-            LogFile = manager.Sites[0].State.ToString(),
-        };
+            ["Name"] = site.Name,
+            ["Schemes"] = () => string.Join(',', site.Bindings.Select(b => b.Protocol)),
+            ["State"] = site.State,
+            ["Log Directory"] = site.LogFile.Directory,
+            ["ID"] = site.Id,
+            ["Server Auto Start"] = site.ServerAutoStart,
+        });
+
+        ListViewGroup grpSiteLimits = lstInfo.Groups.Add("grpSiteLimits", "Web Site (Limits)");
+        AddInfos(grpSiteLimits, new()
+        {
+            ["Connection Timeout"] = site.Limits.ConnectionTimeout.ToString("g"),
+            ["Max Bandwidth"] = site.Limits.MaxBandwidth.ToString("N"),
+            ["Max Connections"] = site.Limits.MaxConnections.ToString("D"),
+            ["Max URL Segments"] = site.Limits.MaxUrlSegments.ToString("D"),
+        });
+
+        ListViewGroup grpAppPool = lstInfo.Groups.Add("grpAppPool", "Application Pool");
+        AddInfos(grpAppPool, new()
+        {
+            ["Name"] = appPool.Name,
+            ["State"] = appPool.State,
+            ["Managed Pipeline Mode"] = appPool.ManagedPipelineMode,
+            ["Managed Runtime Version"] = appPool.ManagedRuntimeVersion,
+            ["Start Mode"] = appPool.StartMode,
+        });
+
+        ListViewGroup grpAppPoolProcessModel =
+            lstInfo.Groups.Add("grpAppPoolProcessModel", "Application Pool (Process Model)");
+        AddInfos(grpAppPoolProcessModel, new()
+        {
+            ["Identity Type"] = appPool.ProcessModel.IdentityType,
+            ["Idle Timeout"] = appPool.ProcessModel.IdleTimeout.ToString("g"),
+            ["Idle Timeout Action"] = appPool.ProcessModel.IdleTimeoutAction,
+            ["Load User Profile"] = appPool.ProcessModel.LoadUserProfile,
+            ["Max Processes"] = appPool.ProcessModel.MaxProcesses,
+            ["Ping Interval"] = appPool.ProcessModel.PingInterval.ToString("g"),
+            ["Ping Response Time"] = appPool.ProcessModel.PingResponseTime.ToString("g"),
+            ["Ping Enabled"] = appPool.ProcessModel.PingingEnabled,
+            ["User Name"] = appPool.ProcessModel.UserName,
+            ["Startup Time Limit"] = appPool.ProcessModel.StartupTimeLimit.ToString("g"),
+            ["Shutdown Time Limit"] = appPool.ProcessModel.ShutdownTimeLimit.ToString("g"),
+        });
+
+        //lstInfo.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+        lstInfo.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
     }
-}
 
-public sealed class IisInfo
-{
-    [Category("Site")]
-    [Description("The name of the web site")]
-    public string? Name { get; set; }
-
-    [Category("Application Pool")]
-    [Description("The name of the application pool")]
-    public string? Description { get; set; }
-
-    public IisInfoBindings[]? Schemes { get; set; }
-
-    [Bindable(true)]
-    [Browsable(true)]
-    public string? LogFile { get; set; }
-}
-
-public sealed class IisInfoBindings
-{
-    public string? Scheme { get; set; }
-
-    public int Port { get; set; } = 80;
-
-    public string? Dns { get; set; }
-
-    public override string ToString() => $"{Scheme}://{Dns}:{Port}";
+    private void AddInfos(ListViewGroup group, Dictionary<string, object?> infos)
+    {
+        foreach ((string name, object? value) in infos)
+        {
+            ListViewItem item = new(name) { Group = group };
+            string strValue = value switch
+            {
+                null => "[NULL]",
+                Func<string> func => func(),
+                _ => value.ToString() ?? "[NULL]"
+            };
+            item.SubItems.Add(strValue);
+            lstInfo.Items.Add(item);
+        }
+    }
 }

@@ -28,22 +28,42 @@ partial class IisInfoView
     /// </summary>
     private void InitializeComponent()
     {
-        grdInfo = new PropertyGrid();
+        lstInfo = new ListView();
+        colProperty = new ColumnHeader();
+        colValue = new ColumnHeader();
         SuspendLayout();
         // 
-        // grdInfo
+        // lstInfo
         // 
-        grdInfo.Dock = DockStyle.Fill;
-        grdInfo.Location = new Point(0, 0);
-        grdInfo.Name = "grdInfo";
-        grdInfo.Size = new Size(629, 492);
-        grdInfo.TabIndex = 0;
+        lstInfo.Columns.AddRange(new ColumnHeader[] { colProperty, colValue });
+        lstInfo.Dock = DockStyle.Fill;
+        lstInfo.FullRowSelect = true;
+        lstInfo.GridLines = true;
+        lstInfo.HeaderStyle = ColumnHeaderStyle.Nonclickable;
+        lstInfo.Location = new Point(0, 0);
+        lstInfo.MultiSelect = false;
+        lstInfo.Name = "lstInfo";
+        lstInfo.Size = new Size(629, 492);
+        lstInfo.Sorting = SortOrder.Ascending;
+        lstInfo.TabIndex = 0;
+        lstInfo.UseCompatibleStateImageBehavior = false;
+        lstInfo.View = View.Details;
+        // 
+        // colProperty
+        // 
+        colProperty.Text = "Property";
+        colProperty.Width = 200;
+        // 
+        // colValue
+        // 
+        colValue.Text = "Value";
+        colValue.Width = 200;
         // 
         // IisInfoView
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        Controls.Add(grdInfo);
+        Controls.Add(lstInfo);
         Name = "IisInfoView";
         Size = new Size(629, 492);
         Load += IisInfoView_Load;
@@ -52,5 +72,7 @@ partial class IisInfoView
 
     #endregion
 
-    private PropertyGrid grdInfo;
+    private ListView lstInfo;
+    private ColumnHeader colProperty;
+    private ColumnHeader colValue;
 }

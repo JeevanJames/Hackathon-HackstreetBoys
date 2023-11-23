@@ -113,7 +113,7 @@ public partial class MainForm : Form
             "2" => new LoggingView { Details = _details },
             "3" => new EventViewerView(),
             "4" => new BrowserView { Details = _details },
-            "5" => new IisInfoView(),
+            "5" => new IisInfoView { Details = _details },
             "6" => new InternetExplorerBrowserView { Details = _details },
             _ => throw new InvalidOperationException($"Unrecognized navigation button {index}."),
         };

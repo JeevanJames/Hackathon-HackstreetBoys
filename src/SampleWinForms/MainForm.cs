@@ -18,10 +18,10 @@ public partial class MainForm : Form
 
     private void browser_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e)
     {
-        InvokeOnUiThreadIfRequired(() => progress.Visible = e.IsLoading);
+        DoInvoke(() => progress.Visible = e.IsLoading);
     }
 
-    public void InvokeOnUiThreadIfRequired(Action action)
+    public void DoInvoke(Action action)
     {
         //If you are planning on using a similar function in your own code then please be sure to
         //have a quick read over https://stackoverflow.com/questions/1874728/avoid-calling-invoke-when-the-control-is-disposed
@@ -37,11 +37,11 @@ public partial class MainForm : Form
 
     private void browser_StatusMessage(object sender, CefSharp.StatusMessageEventArgs e)
     {
-        InvokeOnUiThreadIfRequired(() => lblStatus.Text = e.Value);
+        DoInvoke(() => lblStatus.Text = e.Value);
     }
 
     private void browser_TitleChanged(object sender, CefSharp.TitleChangedEventArgs e)
     {
-        InvokeOnUiThreadIfRequired(() => Text = e.Title);
+        DoInvoke(() => Text = e.Title);
     }
 }
