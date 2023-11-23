@@ -1,15 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+    <PropertyGroup>
+        <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+        <BaseOutputPath>bin\</BaseOutputPath>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CefSharp.WinForms.NETCore" Version="119.4.30" />
-  </ItemGroup>
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk.WindowsDesktop" />
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net7.0-windows</TargetFramework>
+        <Nullable>enable</Nullable>
+        <UseWindowsForms>true</UseWindowsForms>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CefSharp.WinForms.NETCore" Version="119.4.30" />
+    </ItemGroup>
 
 </Project>

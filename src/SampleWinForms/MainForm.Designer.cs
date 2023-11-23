@@ -88,6 +88,7 @@ partial class MainForm
         // 
         txtAddress.Name = "txtAddress";
         txtAddress.Size = new Size(300, 25);
+        txtAddress.Text = "https://yahoo.com";
         // 
         // btnGo
         // 
