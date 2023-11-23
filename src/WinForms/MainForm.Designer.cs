@@ -48,6 +48,7 @@ partial class MainForm
         miViewBrowser = new ToolStripMenuItem();
         miViewIisInfo = new ToolStripMenuItem();
         miViewInternetExplorerBrowser = new ToolStripMenuItem();
+        miViewChromiumBrowser = new ToolStripMenuItem();
         toolbarMain = new ToolStrip();
         tbtnMainLoadSite = new ToolStripButton();
         toolStripSeparator2 = new ToolStripSeparator();
@@ -82,7 +83,7 @@ partial class MainForm
         menuMain.Items.AddRange(new ToolStripItem[] { menuMainFile, menuMainSite, menuMainView });
         menuMain.Location = new Point(0, 0);
         menuMain.Name = "menuMain";
-        menuMain.Size = new Size(800, 24);
+        menuMain.Size = new Size(946, 24);
         menuMain.TabIndex = 0;
         menuMain.Text = "Main menu";
         // 
@@ -97,20 +98,20 @@ partial class MainForm
         // 
         miFileLoadSite.Name = "miFileLoadSite";
         miFileLoadSite.ShortcutKeys = Keys.F2;
-        miFileLoadSite.Size = new Size(180, 22);
+        miFileLoadSite.Size = new Size(150, 22);
         miFileLoadSite.Text = "Load &Site...";
         miFileLoadSite.Click += miFileLoadSite_Click;
         // 
         // miSeparatorFile1
         // 
         miSeparatorFile1.Name = "miSeparatorFile1";
-        miSeparatorFile1.Size = new Size(177, 6);
+        miSeparatorFile1.Size = new Size(147, 6);
         // 
         // miFileExit
         // 
         miFileExit.Image = (Image)resources.GetObject("miFileExit.Image");
         miFileExit.Name = "miFileExit";
-        miFileExit.Size = new Size(180, 22);
+        miFileExit.Size = new Size(150, 22);
         miFileExit.Text = "E&xit";
         miFileExit.Click += miFileExit_Click;
         // 
@@ -170,7 +171,7 @@ partial class MainForm
         // 
         // menuMainView
         // 
-        menuMainView.DropDownItems.AddRange(new ToolStripItem[] { miViewConfig, miViewLogging, miViewEvents, miViewBrowser, miViewIisInfo, miViewInternetExplorerBrowser });
+        menuMainView.DropDownItems.AddRange(new ToolStripItem[] { miViewConfig, miViewLogging, miViewEvents, miViewBrowser, miViewIisInfo, miViewInternetExplorerBrowser, miViewChromiumBrowser });
         menuMainView.Name = "menuMainView";
         menuMainView.Size = new Size(44, 20);
         menuMainView.Text = "&View";
@@ -182,7 +183,6 @@ partial class MainForm
         miViewConfig.Size = new Size(278, 22);
         miViewConfig.Tag = "1";
         miViewConfig.Text = "&Configuration";
-        miViewConfig.Click += menuView_Click;
         // 
         // miViewLogging
         // 
@@ -191,7 +191,6 @@ partial class MainForm
         miViewLogging.Size = new Size(278, 22);
         miViewLogging.Tag = "2";
         miViewLogging.Text = "&Logging";
-        miViewLogging.Click += menuView_Click;
         // 
         // miViewEvents
         // 
@@ -200,7 +199,6 @@ partial class MainForm
         miViewEvents.Size = new Size(278, 22);
         miViewEvents.Tag = "3";
         miViewEvents.Text = "&Event Viewer Logs";
-        miViewEvents.Click += menuView_Click;
         // 
         // miViewBrowser
         // 
@@ -209,7 +207,6 @@ partial class MainForm
         miViewBrowser.Size = new Size(278, 22);
         miViewBrowser.Tag = "4";
         miViewBrowser.Text = "&Browser";
-        miViewBrowser.Click += menuView_Click;
         // 
         // miViewIisInfo
         // 
@@ -218,7 +215,6 @@ partial class MainForm
         miViewIisInfo.Size = new Size(278, 22);
         miViewIisInfo.Tag = "5";
         miViewIisInfo.Text = "IIS Information";
-        miViewIisInfo.Click += menuView_Click;
         // 
         // miViewInternetExplorerBrowser
         // 
@@ -227,7 +223,14 @@ partial class MainForm
         miViewInternetExplorerBrowser.Size = new Size(278, 22);
         miViewInternetExplorerBrowser.Tag = "6";
         miViewInternetExplorerBrowser.Text = "Internet Explorer Browser";
-        miViewInternetExplorerBrowser.Click += menuView_Click;
+        // 
+        // miViewChromiumBrowser
+        // 
+        miViewChromiumBrowser.Name = "miViewChromiumBrowser";
+        miViewChromiumBrowser.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D7;
+        miViewChromiumBrowser.Size = new Size(278, 22);
+        miViewChromiumBrowser.Tag = "7";
+        miViewChromiumBrowser.Text = "Chromium Browser";
         // 
         // toolbarMain
         // 
@@ -235,7 +238,7 @@ partial class MainForm
         toolbarMain.Items.AddRange(new ToolStripItem[] { tbtnMainLoadSite, toolStripSeparator2, tbtnMainRestartSite, tbtnMainRecycleAppPool });
         toolbarMain.Location = new Point(0, 24);
         toolbarMain.Name = "toolbarMain";
-        toolbarMain.Size = new Size(800, 33);
+        toolbarMain.Size = new Size(946, 33);
         toolbarMain.TabIndex = 1;
         // 
         // tbtnMainLoadSite
@@ -284,7 +287,7 @@ partial class MainForm
         toolbarNavigation.Items.AddRange(new ToolStripItem[] { tsNavConfig, tsNavLogging, tsNavEventViewer, tsNavBrowse, tsNavInfo });
         toolbarNavigation.Location = new Point(0, 57);
         toolbarNavigation.Name = "toolbarNavigation";
-        toolbarNavigation.Size = new Size(41, 368);
+        toolbarNavigation.Size = new Size(41, 530);
         toolbarNavigation.TabIndex = 2;
         toolbarNavigation.Text = "Configuration";
         // 
@@ -298,7 +301,6 @@ partial class MainForm
         tsNavConfig.Size = new Size(40, 40);
         tsNavConfig.Tag = "1";
         tsNavConfig.Text = "Configuration";
-        tsNavConfig.Click += menuView_Click;
         // 
         // tsNavLogging
         // 
@@ -310,7 +312,6 @@ partial class MainForm
         tsNavLogging.Size = new Size(40, 40);
         tsNavLogging.Tag = "2";
         tsNavLogging.Text = "Logging";
-        tsNavLogging.Click += menuView_Click;
         // 
         // tsNavEventViewer
         // 
@@ -323,7 +324,6 @@ partial class MainForm
         tsNavEventViewer.Tag = "3";
         tsNavEventViewer.Text = "Event Viewer";
         tsNavEventViewer.ToolTipText = "Event Viewer";
-        tsNavEventViewer.Click += menuView_Click;
         // 
         // tsNavBrowse
         // 
@@ -335,7 +335,6 @@ partial class MainForm
         tsNavBrowse.Size = new Size(40, 40);
         tsNavBrowse.Tag = "4";
         tsNavBrowse.Text = "Browse";
-        tsNavBrowse.Click += menuView_Click;
         // 
         // tsNavInfo
         // 
@@ -348,7 +347,6 @@ partial class MainForm
         tsNavInfo.Size = new Size(40, 40);
         tsNavInfo.Tag = "5";
         tsNavInfo.Text = "IIS Information";
-        tsNavInfo.Click += menuView_Click;
         // 
         // pnlView
         // 
@@ -356,16 +354,16 @@ partial class MainForm
         pnlView.Dock = DockStyle.Fill;
         pnlView.Location = new Point(41, 92);
         pnlView.Name = "pnlView";
-        pnlView.Size = new Size(759, 333);
+        pnlView.Size = new Size(905, 495);
         pnlView.TabIndex = 3;
         // 
         // statusBar
         // 
         statusBar.Items.AddRange(new ToolStripItem[] { lblStatusSiteName, lblStatusAppPool, lblStatusDirectory, lblStatusUrl, lblStatusLogDirectory });
-        statusBar.Location = new Point(0, 425);
+        statusBar.Location = new Point(0, 587);
         statusBar.Name = "statusBar";
         statusBar.ShowItemToolTips = true;
-        statusBar.Size = new Size(800, 25);
+        statusBar.Size = new Size(946, 25);
         statusBar.TabIndex = 4;
         // 
         // lblStatusSiteName
@@ -432,14 +430,14 @@ partial class MainForm
         lblViewHeader.Location = new Point(41, 57);
         lblViewHeader.Name = "lblViewHeader";
         lblViewHeader.Padding = new Padding(5);
-        lblViewHeader.Size = new Size(759, 35);
+        lblViewHeader.Size = new Size(905, 35);
         lblViewHeader.TabIndex = 5;
         // 
         // MainForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(800, 450);
+        ClientSize = new Size(946, 612);
         Controls.Add(pnlView);
         Controls.Add(lblViewHeader);
         Controls.Add(toolbarNavigation);
@@ -447,6 +445,7 @@ partial class MainForm
         Controls.Add(menuMain);
         Controls.Add(statusBar);
         MainMenuStrip = menuMain;
+        MinimumSize = new Size(500, 400);
         Name = "MainForm";
         Text = "DOP Troubleshooter";
         Load += MainForm_Load;
@@ -498,4 +497,5 @@ partial class MainForm
     private ToolStripButton tsNavInfo;
     private Label lblViewHeader;
     private ToolStripMenuItem miViewInternetExplorerBrowser;
+    private ToolStripMenuItem miViewChromiumBrowser;
 }

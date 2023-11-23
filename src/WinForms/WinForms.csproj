@@ -1,6 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+        <BaseOutputPath>bin\</BaseOutputPath>
+    </PropertyGroup>
+
+    <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk.WindowsDesktop" />
+
+    <PropertyGroup>
         <OutputType>WinExe</OutputType>
         <TargetFramework>net7.0-windows</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
@@ -11,12 +18,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="JsonCons.JsonPath" Version="1.1.0" />
-      <PackageReference Include="Microsoft.Web.Administration" Version="11.1.0" />
-      <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2151.40" />
+        <PackageReference Include="CefSharp.WinForms.NETCore" Version="119.4.30" />
+        <PackageReference Include="JsonCons.JsonPath" Version="1.1.0" />
+        <PackageReference Include="Microsoft.Web.Administration" Version="11.1.0" />
+        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2151.40" />
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Update="ChromiumBrowser\ChromiumBrowserView.cs">
+            <SubType>UserControl</SubType>
+        </Compile>
         <Compile Update="Properties\Resources.Designer.cs">
             <DesignTime>True</DesignTime>
             <AutoGen>True</AutoGen>

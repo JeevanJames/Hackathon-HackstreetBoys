@@ -1,13 +1,13 @@
+using System;
 using System.Diagnostics;
+using System.Reflection;
 
+using Hackathon.HackstreetBoys.WinForms.ChromiumBrowser;
 using Hackathon.HackstreetBoys.WinForms.EventViewer;
 using Hackathon.HackstreetBoys.WinForms.IisInfo;
 using Hackathon.HackstreetBoys.WinForms.InternetExplorerBrowser;
 
 using Microsoft.Web.Administration;
-
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 using Application = System.Windows.Forms.Application;
 
@@ -21,6 +21,18 @@ public partial class MainForm : Form
     public MainForm()
     {
         InitializeComponent();
+
+        foreach (ToolStripMenuItem menu in menuMainView.DropDownItems.OfType<ToolStripMenuItem>())
+        {
+            if (menu.Tag is not null)
+                menu.Click += menuView_Click;
+        }
+
+        foreach (ToolStripButton btn in toolbarNavigation.Items.OfType<ToolStripButton>())
+        {
+            if (btn.Tag is not null)
+                btn.Click += menuView_Click;
+        }
     }
 
     private void MainForm_Load(object sender, EventArgs e)
@@ -69,9 +81,9 @@ public partial class MainForm : Form
         Process.Start(new ProcessStartInfo(_details.Url) { UseShellExecute = true });
     }
 
-    private void menuView_Click(object sender, EventArgs e)
+    private void menuView_Click(object? sender, EventArgs e)
     {
-        ActivateNavView(sender);
+        ActivateNavView(sender!);
     }
 
     private bool LoadSite()
@@ -115,6 +127,7 @@ public partial class MainForm : Form
             "4" => new BrowserView { Details = _details },
             "5" => new IisInfoView { Details = _details },
             "6" => new InternetExplorerBrowserView { Details = _details },
+            "7" => new ChromiumBrowserView { Details = _details },
             _ => throw new InvalidOperationException($"Unrecognized navigation button {index}."),
         };
 
