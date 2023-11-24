@@ -61,6 +61,7 @@ partial class EventViewerView
         // 
         ttxtSources.Name = "ttxtSources";
         ttxtSources.Size = new Size(200, 25);
+        ttxtSources.Text = "IIS AspNetCore Module V2";
         // 
         // tbtnRefresh
         // 
@@ -88,7 +89,7 @@ partial class EventViewerView
         // 
         pnlEventViewer.Panel2.Controls.Add(txtMessage);
         pnlEventViewer.Size = new Size(600, 375);
-        pnlEventViewer.SplitterDistance = 196;
+        pnlEventViewer.SplitterDistance = 192;
         pnlEventViewer.SplitterWidth = 8;
         pnlEventViewer.TabIndex = 2;
         // 
@@ -105,7 +106,7 @@ partial class EventViewerView
         grdLogs.ReadOnly = true;
         grdLogs.RowTemplate.Height = 25;
         grdLogs.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-        grdLogs.Size = new Size(600, 196);
+        grdLogs.Size = new Size(600, 192);
         grdLogs.TabIndex = 0;
         grdLogs.RowEnter += grdLogs_RowEnter;
         // 
@@ -146,7 +147,7 @@ partial class EventViewerView
         txtMessage.Name = "txtMessage";
         txtMessage.ReadOnly = true;
         txtMessage.ScrollBars = ScrollBars.Both;
-        txtMessage.Size = new Size(600, 171);
+        txtMessage.Size = new Size(600, 175);
         txtMessage.TabIndex = 0;
         txtMessage.WordWrap = false;
         // 

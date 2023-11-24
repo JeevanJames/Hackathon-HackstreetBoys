@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Hackathon.HackstreetBoys.WinForms;
@@ -94,7 +93,8 @@ public partial class LoggingView : UserControl
 
         List<string> sources = new();
 
-        using StreamReader reader = File.OpenText(logFile.FullName);
+        await using FileStream logStream = new(logFile.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        using StreamReader reader = new(logStream);
         string? line = await reader.ReadLineAsync();
         while (line is not null)
         {
