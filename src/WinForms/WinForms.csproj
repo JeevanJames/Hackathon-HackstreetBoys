@@ -18,7 +18,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CefSharp.WinForms.NETCore" Version="119.4.30" />
+        <PackageReference Include="CefSharp.WinForms.NETCore" Version="120.2.50" />
         <PackageReference Include="JsonCons.JsonPath" Version="1.1.0" />
         <PackageReference Include="Microsoft.Web.Administration" Version="11.1.0" />
         <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2151.40" />
